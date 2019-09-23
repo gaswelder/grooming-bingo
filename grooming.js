@@ -98,6 +98,8 @@ class Grooming {
   }
 }
 
+Notification.requestPermission();
+
 window.initGrooming = function(root) {
   const chatRoot = document.createElement("div");
   chatRoot.className = "chatRoot";
@@ -163,6 +165,9 @@ function initChat(grooming, container) {
     p.innerText = `${message.author}: ${message.text}`;
     messages.appendChild(p);
     messages.scrollBy(0, 1e6);
+    if (document.hidden && Notification.permission == "granted") {
+      new Notification(`${message.author}: ${message.text}`);
+    }
   });
 }
 
