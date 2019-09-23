@@ -161,10 +161,15 @@ function initTickets(grooming, container) {
     const advices = [
       "it's very easy",
       "пропозаль",
+      "папап",
       "I'm not sure",
       "it's a different card",
       "there's a card for that",
-      "copypest"
+      "copypest",
+      "exactly",
+      "I have to look at the code",
+      "makes sense",
+      "does not make sense"
     ];
     const is = advice => ticket.advices.includes(advice);
 
