@@ -151,6 +151,14 @@ function initChat(grooming, container) {
 
   grooming.onChatMessage(message => {
     const p = document.createElement("p");
+    if (message.text == "@here") {
+      Object.assign(p.style, {
+        fontWeight: "bold",
+        color: "chartreuse",
+        background: "crimson",
+        display: "inline-block"
+      });
+    }
     p.innerText = `${message.author}: ${message.text}`;
     messages.appendChild(p);
     messages.scrollBy(0, 1e6);
