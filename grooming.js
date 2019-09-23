@@ -93,6 +93,9 @@ class Grooming {
   createTicket(title) {
     this._send("createTicket", { title });
   }
+  deleteTicket(ticketId) {
+    this._send("deleteTicket", { ticketId });
+  }
 }
 
 window.initGrooming = function(root) {
@@ -175,6 +178,17 @@ function initTickets(grooming, container) {
     grooming.toggleVote(ticketId, score);
   });
 
+  container.addEventListener("click", function(event) {
+    if (event.target.tagName != "BUTTON" || event.target.name != "delete") {
+      return;
+    }
+    if (!confirm("delete?")) {
+      return;
+    }
+    const { ticketId } = event.target.dataset;
+    grooming.deleteTicket(ticketId);
+  });
+
   function renderTicket(ticket) {
     const votes = score =>
       ticket.votes
@@ -182,7 +196,9 @@ function initTickets(grooming, container) {
         .map(vote => vote.author)
         .join(", ");
     return `<div class="ticket">
-                <h3>${ticket.title}</h3>
+                <h3>${ticket.title} <button name="delete" data-ticket-id="${
+      ticket.id
+    }">&times;</button></h3>
                 <div>
                 ${scores
                   .map(

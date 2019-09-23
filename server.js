@@ -68,6 +68,9 @@ wss.on("connection", function connection(ws) {
     toggleAdvice(val) {
       const { ticketId, advice } = val;
       const ticket = state.tickets.find(t => t.id == ticketId);
+      if (!ticket) {
+        return;
+      }
       const pos = ticket.advices.indexOf(advice);
       if (pos >= 0) {
         ticket.advices.splice(pos, 1);
@@ -79,6 +82,9 @@ wss.on("connection", function connection(ws) {
     toggleVote(val) {
       const { ticketId, score } = val;
       const ticket = state.tickets.find(t => t.id == ticketId);
+      if (!ticket) {
+        return;
+      }
       const pos = ticket.votes.findIndex(
         vote => vote.author == user && vote.score == score
       );
@@ -90,6 +96,15 @@ wss.on("connection", function connection(ws) {
           score
         });
       }
+      sendAll("tickets", state.tickets);
+    },
+    deleteTicket(val) {
+      const { ticketId } = val;
+      const pos = state.tickets.find(t => t.id == ticketId);
+      if (pos < 0) {
+        return;
+      }
+      state.tickets.splice(pos, 1);
       sendAll("tickets", state.tickets);
     },
     createTicket(val) {
