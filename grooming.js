@@ -123,16 +123,30 @@ window.initGrooming = function(root) {
 };
 
 function initChat(grooming, container) {
-  container.innerHTML =
-    "<div></div><form><textarea></textarea><button>Send (ctrl+enter)</button></form>";
+  container.innerHTML = `<div></div><form><textarea></textarea><button type="submit">Send (ctrl+enter)</button></form>`;
   const form = container.querySelector("form");
   const textarea = container.querySelector("textarea");
   const messages = container.querySelector("div");
 
-  form.addEventListener("submit", event => {
-    event.preventDefault();
+  function send() {
     grooming.sendChatMessage(textarea.value);
     textarea.value = "";
+  }
+
+  form.addEventListener("submit", event => {
+    event.preventDefault();
+    send();
+  });
+
+  container.addEventListener("keypress", function(event) {
+    if (
+      event.target.tagName != "TEXTAREA" ||
+      event.key != "Enter" ||
+      !event.ctrlKey
+    ) {
+      return;
+    }
+    send();
   });
 
   grooming.onChatMessage(message => {
