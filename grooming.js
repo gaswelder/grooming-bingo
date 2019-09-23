@@ -24,6 +24,9 @@ class Grooming {
   constructor(username) {
     this.username = username;
     this.connect();
+    setInterval(() => {
+      this._send("echo", Date.now());
+    }, 10000);
   }
 
   connect() {
@@ -45,6 +48,10 @@ class Grooming {
       });
     });
     this.ws = ws;
+  }
+
+  _msg_ohce(data) {
+    console.log("RTT time", Date.now() - data, "ms");
   }
 
   _msg_init(data) {

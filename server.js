@@ -50,6 +50,9 @@ wss.on("connection", function connection(ws) {
     sockets.forEach(ws => ws.send(s));
   }
   const handlers = {
+    echo(val) {
+      send("ohce", val);
+    },
     auth(val) {
       user = val;
       send("init", state);
