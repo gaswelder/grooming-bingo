@@ -172,15 +172,18 @@ function initTickets(grooming, container) {
       "does not make sense"
     ];
     const is = advice => ticket.advices.includes(advice);
+    const id = i => `tn-${ticket.id}-${i}`;
 
     return (
-      "<table>" +
+      `<table>
+      <caption>Technical notes</caption>
+      ` +
       advices
         .map(
-          advice =>
-            `<tr><td>${advice}</td>
+          (advice, i) =>
+            `<tr><td><label for="${id(i)}">${advice}</label></td>
             <td>
-            <input data-ticket-id="${
+            <input id="${id(i)}" data-ticket-id="${
               ticket.id
             }" data-advice="${advice}" class="advice-toggle" type="checkbox" ${
               is(advice) ? "checked" : ""
