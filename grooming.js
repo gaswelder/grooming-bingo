@@ -24,6 +24,7 @@ class Grooming {
   constructor(username) {
     this.username = username;
     this.queue = [];
+    this.loadListeners = [];
     this.connect();
     setInterval(() => {
       this._send("echo", Date.now());
@@ -61,7 +62,7 @@ class Grooming {
 
   _msg_init(data) {
     this.state = data;
-    this.onLoad();
+    this.loadListeners.forEach(fn => fn(data));
     this.state.chat.forEach(msg => this.chatListeners.forEach(fn => fn(msg)));
   }
 
@@ -82,12 +83,14 @@ class Grooming {
     this.state.tickets = tickets;
     this.ticketListeners.forEach(fn => fn(this.state.tickets));
   }
+  onLoad(func) {
+    this.loadListeners.push(func);
+  }
   onChatMessage(func) {
     this.chatListeners = [func];
   }
   onTicketsChange(func) {
     this.ticketListeners = [func];
-    func(this.state.tickets);
   }
 
   sendChatMessage(text) {
@@ -127,10 +130,8 @@ window.initGrooming = function(root) {
   }
 
   const grooming = new Grooming(username);
-  grooming.onLoad = function() {
-    initChat(grooming, chatRoot);
-    initTickets(grooming, ticketsRoot);
-  };
+  initChat(grooming, chatRoot);
+  initTickets(grooming, ticketsRoot);
 };
 
 function initChat(grooming, container) {
@@ -161,6 +162,10 @@ function initChat(grooming, container) {
     send();
   });
 
+  grooming.onLoad(() => {
+    messages.innerHTML = "";
+  });
+
   grooming.onChatMessage(message => {
     const p = document.createElement("p");
     if (message.text == "@here") {
@@ -182,6 +187,11 @@ function initChat(grooming, container) {
 
 function initTickets(grooming, container) {
   const scores = [1, 2, 3, 5, 8, 13];
+  grooming.onLoad(function(state) {
+    container.innerHTML =
+      state.tickets.map(renderTicket).join("") +
+      `<form><input required><button>Add ticket</form>`;
+  });
   grooming.onTicketsChange(function(tickets) {
     container.innerHTML =
       tickets.map(renderTicket).join("") +
