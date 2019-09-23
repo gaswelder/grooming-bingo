@@ -23,6 +23,7 @@ function hideBanner() {
 class Grooming {
   constructor(username) {
     this.username = username;
+    this.queue = [];
     this.connect();
     setInterval(() => {
       this._send("echo", Date.now());
@@ -35,8 +36,6 @@ class Grooming {
       setTimeout(() => this.connect(), 3000);
     });
     ws.addEventListener("open", () => {
-      hideBanner();
-      this._send("auth", this.username);
       ws.addEventListener("close", () => {
         this.ws = null;
         showBanner();
@@ -46,8 +45,14 @@ class Grooming {
         const msg = JSON.parse(message.data);
         this["_msg_" + msg.type].call(this, msg.val);
       });
+
+      this.ws = ws;
+      this._send("auth", this.username);
+      const tail = this.queue;
+      this.queue = [];
+      tail.forEach(([type, val]) => this._send(type, val));
+      hideBanner();
     });
-    this.ws = ws;
   }
 
   _msg_ohce(data) {
@@ -66,8 +71,12 @@ class Grooming {
   }
 
   _send(type, val) {
-    const data = { type, val };
-    this.ws.send(JSON.stringify(data));
+    if (!this.ws) {
+      this.queue.push([type, val]);
+    } else {
+      const data = { type, val };
+      this.ws.send(JSON.stringify(data));
+    }
   }
   _msg_tickets(tickets) {
     this.state.tickets = tickets;
