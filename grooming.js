@@ -123,7 +123,7 @@ window.initGrooming = function(root) {
 };
 
 function initChat(grooming, container) {
-  container.innerHTML = `<div></div><form><textarea></textarea><button type="submit">Send (ctrl+enter)</button></form>`;
+  container.innerHTML = `<div></div><form><textarea></textarea><button type="submit">Send (enter)</button></form>`;
   const form = container.querySelector("form");
   const textarea = container.querySelector("textarea");
   const messages = container.querySelector("div");
@@ -142,10 +142,11 @@ function initChat(grooming, container) {
     if (
       event.target.tagName != "TEXTAREA" ||
       event.key != "Enter" ||
-      !event.ctrlKey
+      event.ctrlKey
     ) {
       return;
     }
+    event.preventDefault();
     send();
   });
 
