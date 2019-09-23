@@ -1,13 +1,50 @@
+const banner = document.createElement("div");
+banner.innerText = "Socket closed, reconnecting";
+banner.class = "banner";
+document.body.appendChild(banner);
+Object.assign(banner.style, {
+  position: "fixed",
+  left: "50%",
+  top: "50%",
+  background: "crimson",
+  color: "white",
+  padding: "1em",
+  borderRadius: "8px",
+  display: "none"
+});
+
+function showBanner() {
+  banner.style.display = "block";
+}
+function hideBanner() {
+  banner.style.display = "none";
+}
+
 class Grooming {
   constructor(username) {
-    this.ws = new WebSocket(`ws://${location.host}/grooming`);
-    this.ws.addEventListener("open", () => {
-      this._send("auth", username);
+    this.username = username;
+    this.connect();
+  }
+
+  connect() {
+    const ws = new WebSocket(`ws://${location.host}/grooming`);
+    ws.addEventListener("error", () => {
+      setTimeout(() => this.connect(), 3000);
     });
-    this.ws.addEventListener("message", message => {
-      const msg = JSON.parse(message.data);
-      this["_msg_" + msg.type].call(this, msg.val);
+    ws.addEventListener("open", () => {
+      hideBanner();
+      this._send("auth", this.username);
+      ws.addEventListener("close", () => {
+        this.ws = null;
+        showBanner();
+        this.connect();
+      });
+      ws.addEventListener("message", message => {
+        const msg = JSON.parse(message.data);
+        this["_msg_" + msg.type].call(this, msg.val);
+      });
     });
+    this.ws = ws;
   }
 
   _msg_init(data) {
