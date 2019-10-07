@@ -1,27 +1,6 @@
 import initChat from "./chat";
 import initTickets from "./tickets";
-
-const banner = document.createElement("div");
-banner.innerText = "Socket closed, reconnecting";
-banner.class = "banner";
-document.body.appendChild(banner);
-Object.assign(banner.style, {
-  position: "fixed",
-  left: "50%",
-  top: "50%",
-  background: "crimson",
-  color: "white",
-  padding: "1em",
-  borderRadius: "8px",
-  display: "none"
-});
-
-function showBanner() {
-  banner.style.display = "block";
-}
-function hideBanner() {
-  banner.style.display = "none";
-}
+import initBanner from "./banner";
 
 class Grooming {
   constructor(username) {
@@ -143,11 +122,5 @@ window.initGrooming = function(root) {
   const grooming = new Grooming(username);
   initChat(grooming, chatRoot);
   initTickets(grooming, ticketsRoot);
-  grooming.onConnectionChange(function(online) {
-    if (online) {
-      hideBanner();
-    } else {
-      showBanner();
-    }
-  });
+  initBanner(grooming);
 };
