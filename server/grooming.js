@@ -37,16 +37,31 @@ exports.Grooming = class Grooming {
       return false;
     }
     const pos = ticket.votes.findIndex(
-      vote => vote.author == user && vote.score == score
+      v => v.author == user && v.score == score
     );
+    // If this is an existing vote, just remove it.
     if (pos >= 0) {
       ticket.votes.splice(pos, 1);
-    } else {
-      ticket.votes.push({
-        author: user,
-        score
-      });
+      return true;
     }
+
+    // If the user is adding another vote, make sure the result
+    // is not more than two votes.
+    // Keep only one old vote that is closest to the new vote
+    const existingScores = ticket.votes
+      .filter(vote => vote.author == user)
+      .map(vote => vote.score)
+      .sort((a, b) => Math.abs(b - score) - Math.abs(a - score));
+    const remove = s =>
+      (ticket.votes = ticket.votes.filter(
+        v => v.author == user && v.score == s
+      ));
+    existingScores.slice(1).forEach(remove);
+
+    ticket.votes.push({
+      author: user,
+      score
+    });
     return true;
   }
 
