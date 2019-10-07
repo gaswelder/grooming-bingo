@@ -58,58 +58,30 @@ wss.on("connection", function connection(ws) {
         author: user,
         text: val
       };
-      grooming.state.chat.push(msg);
+      grooming.chat(msg);
       sendAll("chat", msg);
     },
     toggleAdvice(val) {
       const { ticketId, advice } = val;
-      const ticket = grooming.state.tickets.find(t => t.id == ticketId);
-      if (!ticket) {
-        return;
+      if (grooming.toggleAdvice(ticketId, advice)) {
+        sendAll("tickets", grooming.state.tickets);
       }
-      const pos = ticket.advices.indexOf(advice);
-      if (pos >= 0) {
-        ticket.advices.splice(pos, 1);
-      } else {
-        ticket.advices.push(advice);
-      }
-      sendAll("tickets", grooming.state.tickets);
     },
     toggleVote(val) {
       const { ticketId, score } = val;
-      const ticket = grooming.state.tickets.find(t => t.id == ticketId);
-      if (!ticket) {
-        return;
+      if (grooming.toggleVote(user, ticketId, score)) {
+        sendAll("tickets", grooming.state.tickets);
       }
-      const pos = ticket.votes.findIndex(
-        vote => vote.author == user && vote.score == score
-      );
-      if (pos >= 0) {
-        ticket.votes.splice(pos);
-      } else {
-        ticket.votes.push({
-          author: user,
-          score
-        });
-      }
-      sendAll("tickets", grooming.state.tickets);
     },
     deleteTicket(val) {
       const { ticketId } = val;
-      const pos = grooming.state.tickets.find(t => t.id == ticketId);
-      if (pos < 0) {
-        return;
+      if (grooming.deleteTicket(ticketId)) {
+        sendAll("tickets", grooming.state.tickets);
       }
-      grooming.state.tickets.splice(pos, 1);
-      sendAll("tickets", grooming.state.tickets);
     },
     createTicket(val) {
-      grooming.state.tickets.push({
-        id: Date.now(),
-        title: val.title,
-        advices: [],
-        votes: []
-      });
+      const { title } = val;
+      grooming.createTicket(title);
       sendAll("tickets", grooming.state.tickets);
     }
   };
