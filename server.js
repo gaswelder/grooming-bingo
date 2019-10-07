@@ -2,6 +2,7 @@ const http = require("http");
 const ws = require("ws");
 const fs = require("fs");
 const util = require("util");
+const { Grooming } = require("./server/grooming");
 
 const p = util.promisify;
 const readFile = p(fs.readFile);
@@ -27,18 +28,7 @@ const server = http.createServer(function(req, res) {
 });
 const wss = new ws.Server({ server });
 
-const state = {
-  tickets: [
-    {
-      id: 1,
-      title: "пропозаль",
-      advices: [],
-      votes: []
-    }
-  ],
-  chat: []
-};
-
+const grooming = new Grooming();
 const sockets = [];
 
 wss.on("connection", function connection(ws) {
@@ -61,19 +51,19 @@ wss.on("connection", function connection(ws) {
     },
     auth(val) {
       user = val;
-      send("init", state);
+      send("init", grooming.state);
     },
     chat(val) {
       const msg = {
         author: user,
         text: val
       };
-      state.chat.push(msg);
+      grooming.state.chat.push(msg);
       sendAll("chat", msg);
     },
     toggleAdvice(val) {
       const { ticketId, advice } = val;
-      const ticket = state.tickets.find(t => t.id == ticketId);
+      const ticket = grooming.state.tickets.find(t => t.id == ticketId);
       if (!ticket) {
         return;
       }
@@ -83,11 +73,11 @@ wss.on("connection", function connection(ws) {
       } else {
         ticket.advices.push(advice);
       }
-      sendAll("tickets", state.tickets);
+      sendAll("tickets", grooming.state.tickets);
     },
     toggleVote(val) {
       const { ticketId, score } = val;
-      const ticket = state.tickets.find(t => t.id == ticketId);
+      const ticket = grooming.state.tickets.find(t => t.id == ticketId);
       if (!ticket) {
         return;
       }
@@ -102,25 +92,25 @@ wss.on("connection", function connection(ws) {
           score
         });
       }
-      sendAll("tickets", state.tickets);
+      sendAll("tickets", grooming.state.tickets);
     },
     deleteTicket(val) {
       const { ticketId } = val;
-      const pos = state.tickets.find(t => t.id == ticketId);
+      const pos = grooming.state.tickets.find(t => t.id == ticketId);
       if (pos < 0) {
         return;
       }
-      state.tickets.splice(pos, 1);
-      sendAll("tickets", state.tickets);
+      grooming.state.tickets.splice(pos, 1);
+      sendAll("tickets", grooming.state.tickets);
     },
     createTicket(val) {
-      state.tickets.push({
+      grooming.state.tickets.push({
         id: Date.now(),
         title: val.title,
         advices: [],
         votes: []
       });
-      sendAll("tickets", state.tickets);
+      sendAll("tickets", grooming.state.tickets);
     }
   };
   ws.on("message", function incoming(message) {
