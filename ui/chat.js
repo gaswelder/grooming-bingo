@@ -1,3 +1,5 @@
+const specials = ["@here", "@ashkan", "@kek", "@topkek"];
+
 export default function initChat(grooming, container) {
   container.innerHTML = `<div></div><form><textarea></textarea><button type="submit">Send (enter)</button></form>`;
   const form = container.querySelector("form");
@@ -32,12 +34,12 @@ export default function initChat(grooming, container) {
 
   grooming.onChatMessage(message => {
     const p = document.createElement("p");
-    if (message.text == "@here") {
+    if (specials.includes(message.text)) {
       Object.assign(p.style, {
         fontWeight: "bold",
         color: "chartreuse",
         background: "crimson",
-        display: "inline-block"
+        display: "block"
       });
     }
     p.innerText = `${message.author}: ${message.text}`;
