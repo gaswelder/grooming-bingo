@@ -31,20 +31,17 @@ const wss = new ws.Server({ server });
 const grooming = new Grooming();
 const sockets = [];
 
-wss.on("connection", function connection(ws) {
-  sockets.push(ws);
-  ws.on("close", function() {
-    const pos = sockets.indexOf(ws);
-    sockets.splice(pos, 1);
-  });
+function sendAll(type, val) {
+  const s = JSON.stringify({ type, val });
+  sockets.forEach(ws => ws.send(s));
+}
+
+function processSocket(ws) {
   let user;
   function send(type, val) {
     ws.send(JSON.stringify({ type, val }));
   }
-  function sendAll(type, val) {
-    const s = JSON.stringify({ type, val });
-    sockets.forEach(ws => ws.send(s));
-  }
+
   const handlers = {
     echo(val) {
       send("ohce", val);
@@ -90,6 +87,15 @@ wss.on("connection", function connection(ws) {
     console.log(msg);
     handlers[msg.type](msg.val);
   });
+}
+
+wss.on("connection", function connection(ws) {
+  sockets.push(ws);
+  ws.on("close", function() {
+    const pos = sockets.indexOf(ws);
+    sockets.splice(pos, 1);
+  });
+  processSocket(ws);
 });
 
 server.listen(process.env.PORT || 8080);
