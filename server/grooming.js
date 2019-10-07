@@ -40,7 +40,7 @@ exports.Grooming = class Grooming {
       vote => vote.author == user && vote.score == score
     );
     if (pos >= 0) {
-      ticket.votes.splice(pos);
+      ticket.votes.splice(pos, 1);
     } else {
       ticket.votes.push({
         author: user,
