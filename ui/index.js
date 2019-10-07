@@ -3,8 +3,6 @@ import initTickets from "./tickets";
 import initBanner from "./banner";
 import { Grooming } from "./grooming";
 
-Notification.requestPermission();
-
 window.initGrooming = function(root) {
   const chatRoot = document.createElement("div");
   chatRoot.className = "chatRoot";
@@ -21,6 +19,8 @@ window.initGrooming = function(root) {
       localStorage.setItem("username", username);
     }
   }
+
+  Notification.requestPermission();
 
   const grooming = new Grooming(username);
   initChat(grooming, chatRoot);
