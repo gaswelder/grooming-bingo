@@ -28,10 +28,20 @@ class Grooming {
     this.username = username;
     this.queue = [];
     this.loadListeners = [];
+    this.connectionListeners = [];
     this.connect();
     setInterval(() => {
       this._send("echo", Date.now());
     }, 10000);
+  }
+
+  onConnectionChange(f) {
+    this.connectionListeners.push(f);
+  }
+
+  setSocket(ws) {
+    this.ws = ws;
+    this.connectionListeners.forEach(f => f(ws != null));
   }
 
   connect() {
@@ -41,8 +51,7 @@ class Grooming {
     });
     ws.addEventListener("open", () => {
       ws.addEventListener("close", () => {
-        this.ws = null;
-        showBanner();
+        this.setSocket(null);
         this.connect();
       });
       ws.addEventListener("message", message => {
@@ -50,12 +59,11 @@ class Grooming {
         this["_msg_" + msg.type].call(this, msg.val);
       });
 
-      this.ws = ws;
+      this.setSocket(ws);
       this._send("auth", this.username);
       const tail = this.queue;
       this.queue = [];
       tail.forEach(([type, val]) => this._send(type, val));
-      hideBanner();
     });
   }
 
@@ -135,4 +143,11 @@ window.initGrooming = function(root) {
   const grooming = new Grooming(username);
   initChat(grooming, chatRoot);
   initTickets(grooming, ticketsRoot);
+  grooming.onConnectionChange(function(online) {
+    if (online) {
+      hideBanner();
+    } else {
+      showBanner();
+    }
+  });
 };
