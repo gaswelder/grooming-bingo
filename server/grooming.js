@@ -51,7 +51,7 @@ exports.Grooming = class Grooming {
   }
 
   deleteTicket(ticketId) {
-    const pos = this.state.tickets.find(t => t.id == ticketId);
+    const pos = this.state.tickets.findIndex(t => t.id == ticketId);
     if (pos < 0) {
       return false;
     }
