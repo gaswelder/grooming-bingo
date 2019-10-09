@@ -19,8 +19,15 @@ export class Grooming {
     this.connectionListeners.forEach(f => f(ws != null));
   }
 
+  url() {
+    if (location.host.includes("localhost")) {
+      return `ws://${location.host}/grooming`;
+    }
+    return `wss://${location.host}/grooming`;
+  }
+
   connect() {
-    const ws = new WebSocket(`ws://${location.host}/grooming`);
+    const ws = new WebSocket(this.url());
     ws.addEventListener("error", () => {
       setTimeout(() => this.connect(), 3000);
     });
