@@ -1,16 +1,10 @@
 exports.Grooming = class Grooming {
   constructor() {
     this.state = {
-      tickets: [
-        {
-          id: 1,
-          title: "пропозаль",
-          advices: {},
-          votes: []
-        }
-      ],
+      tickets: [],
       chat: []
     };
+    this.createTicket("Пропозаль");
   }
 
   chat(msg) {
@@ -88,7 +82,7 @@ exports.Grooming = class Grooming {
     this.state.tickets.push({
       id: Date.now(),
       title,
-      advices: [],
+      advices: {},
       votes: []
     });
   }

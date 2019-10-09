@@ -30,7 +30,7 @@ export default function initTickets(grooming, container) {
     const input = event.target.querySelector("input");
     const title = input.value;
     grooming.createTicket(title);
-    title.value = "";
+    event.target.value = "";
   });
 
   container.addEventListener("click", function(event) {
@@ -64,7 +64,6 @@ export default function initTickets(grooming, container) {
         break;
       case "add-advice":
         grooming.addAdvice(ticketId, advice);
-
         break;
     }
   });
