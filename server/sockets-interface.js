@@ -37,7 +37,8 @@ module.exports = function socketsInterface(wss) {
       chat(val) {
         const msg = {
           author: user,
-          text: val
+          text: val,
+          timestamp: Date.now()
         };
         grooming.chat(msg);
         sendAll("chat", msg);

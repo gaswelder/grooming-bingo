@@ -6,15 +6,15 @@ export default function initChat(grooming, container) {
   const textarea = container.querySelector("textarea");
   const messages = container.querySelector("div");
 
-  function send() {
-    grooming.sendChatMessage(textarea.value);
-    textarea.value = "";
-  }
-
   form.addEventListener("submit", event => {
     event.preventDefault();
     send();
   });
+
+  function send() {
+    grooming.sendChatMessage(textarea.value);
+    textarea.value = "";
+  }
 
   container.addEventListener("keypress", function(event) {
     if (
@@ -33,20 +33,45 @@ export default function initChat(grooming, container) {
   });
 
   grooming.onChatMessage(message => {
-    const p = document.createElement("p");
-    if (specials.includes(message.text)) {
-      Object.assign(p.style, {
-        fontWeight: "bold",
-        color: "chartreuse",
-        background: "crimson",
-        display: "block"
-      });
-    }
-    p.innerText = `${message.author}: ${message.text}`;
-    messages.appendChild(p);
+    messages.appendChild(render(message));
     messages.scrollBy(0, 1e6);
     if (document.hidden && Notification.permission == "granted") {
       new Notification(`${message.author}: ${message.text}`);
     }
   });
+}
+
+function render(message) {
+  const p = document.createElement("p");
+
+  const time = document.createElement("time");
+  time.innerText = formatTime(message.timestamp);
+
+  const text = document.createElement("span");
+  if (specials.includes(message.text)) {
+    Object.assign(text.style, {
+      fontWeight: "bold",
+      color: "chartreuse",
+      background: "crimson"
+    });
+  }
+  text.innerText = `${message.author}: ${message.text}`;
+
+  p.appendChild(time);
+  p.appendChild(text);
+  return p;
+}
+
+function formatTime(timestamp) {
+  const d = new Date(timestamp);
+  return [
+    d
+      .getHours()
+      .toString()
+      .padStart(2, "0"),
+    d
+      .getMinutes()
+      .toString()
+      .padStart(2, "0")
+  ].join(":");
 }

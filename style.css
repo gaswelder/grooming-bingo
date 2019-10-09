@@ -32,6 +32,12 @@ body {
   font-family: inherit;
   font-size: inherit;
 }
+.chatRoot time {
+  color: gray;
+  margin-right: 4px;
+  font-size: 90%;
+}
+
 .ticketsRoot {
   overflow-y: scroll;
   flex: 1;
