@@ -14,16 +14,18 @@ function serveFile(res, localPath) {
     .then(() => res.end());
 }
 
+const staticFiles = {
+  "/": "index.html",
+  "/grooming.js": "grooming.bin.js",
+  "/style.css": "style.css"
+};
+
 const server = http.createServer(function(req, res) {
-  if (req.url == "/") {
-    serveFile(res, "index.html");
+  if (req.url in staticFiles) {
+    serveFile(res, staticFiles[req.url]);
     return;
   }
-  if (req.url == "/grooming.js") {
-    serveFile(res, "grooming.bin.js");
-    return;
-  }
-  res.write("nothing is here");
+  res.write("Nothing");
   res.end();
 });
 const wss = new ws.Server({ server });

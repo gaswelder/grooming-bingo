@@ -3,53 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <title>Grooming</title>
-    <style>
-      html,
-      body {
-        height: 100%;
-        padding: 0;
-        margin: 0;
-        background-color: #ebecf0;
-        font-family: Segoe UI, Roboto, Noto Sans, Ubuntu, Droid Sans,
-          Helvetica Neue, sans-serif;
-        font-size: 14px;
-      }
-      #root {
-        outline: thin solid red;
-        width: 100%;
-        height: 100%;
-        display: flex;
-      }
-      .chatRoot {
-        display: flex;
-        flex-direction: column;
-        background: linen;
-      }
-      .chatRoot > div {
-        overflow-y: scroll;
-        flex: 1;
-      }
-      .chatRoot textarea {
-        width: 100%;
-        min-height: 6em;
-      }
-      .ticketsRoot {
-        overflow-y: scroll;
-        flex: 1;
-      }
-      .ticket {
-        display: inline-block;
-        background: white;
-        border-radius: 3px;
-        padding: 1em;
-        margin: 0.5em;
-        box-shadow: 0 1px 0 rgba(9, 30, 66, 0.25);
-
-        margin-bottom: 8px;
-        max-width: 300px;
-        min-height: 20px;
-      }
-    </style>
+    <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <script src="grooming.js"></script>
