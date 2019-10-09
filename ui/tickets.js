@@ -147,7 +147,7 @@ function renderChecks(count) {
     return "";
   }
   let s = "";
-  const n = Math.ceil(count / 3);
+  const n = Math.ceil(count / 2);
   for (let i = 0; i < n; i++) {
     s += "+";
   }
