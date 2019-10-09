@@ -96,7 +96,7 @@ export default function initTickets(grooming, container) {
 
     return (
       `<table>
-        <caption>Technical notes</caption>
+        <caption>Implementation notes</caption>
         ` +
       advices
         .map(
