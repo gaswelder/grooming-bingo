@@ -1,1 +1,1 @@
-nodemon server.sh
+nodemon server.js

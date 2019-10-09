@@ -7,20 +7,20 @@ const socketsInterface = require("./server/sockets-interface");
 const p = util.promisify;
 const readFile = p(fs.readFile);
 
-const indexPage = fs.readFileSync(__dirname + "/index.html");
-const groomingScript = () => readFile(__dirname + "/grooming.bin.js");
+function serveFile(res, localPath) {
+  readFile(__dirname + "/" + localPath)
+    .then(src => res.write(src))
+    .catch(err => res.write(err.toString()))
+    .then(() => res.end());
+}
 
 const server = http.createServer(function(req, res) {
   if (req.url == "/") {
-    res.write(indexPage);
-    res.end();
+    serveFile(res, "index.html");
     return;
   }
   if (req.url == "/grooming.js") {
-    groomingScript()
-      .then(src => res.write(src))
-      .catch(err => res.write(err.toString()))
-      .then(() => res.end());
+    serveFile(res, "grooming.bin.js");
     return;
   }
   res.write("nothing is here");
