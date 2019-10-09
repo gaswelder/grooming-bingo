@@ -70,34 +70,40 @@ export default function initTickets(grooming, container) {
   });
 }
 
-const scores = [1, 2, 3, 5, 8, 13];
+const scores = [1, 2, 3, 5, 8, 13].reverse();
 
 function renderTicket(ticket) {
+  return `<div class="ticket">
+    <h3>${ticket.title} <button name="delete" data-ticket-id="${
+    ticket.id
+  }">&times;</button></h3>
+      <div>
+      ${renderTechnicalDetails(ticket)}
+      ${renderVotes(ticket)}
+      </div>
+    </div>`;
+}
+
+function renderVotes(ticket) {
   const votes = score =>
     ticket.votes
       .filter(vote => vote.score == score)
       .map(vote => vote.author)
       .join(", ");
-  return `<div class="ticket">
-                <h3>${ticket.title} <button name="delete" data-ticket-id="${
-    ticket.id
-  }">&times;</button></h3>
-                <div>
-                ${scores
-                  .map(
-                    score =>
-                      `<div><button class="score" data-ticket-id="${
-                        ticket.id
-                      }" data-score="${score}" type="button">${score}</button> ${votes(
-                        score
-                      )}</div>`
-                  )
-                  .join("")}
-                </div>
-                <div>
-                    ${renderTechnicalDetails(ticket)}
-                </div>
-            </div>`;
+
+  return `<div class="votes">
+    <h4>Votes</h4>
+    ${scores
+      .map(
+        score =>
+          `<div><button class="score" data-ticket-id="${
+            ticket.id
+          }" data-score="${score}" type="button">${score}</button> ${votes(
+            score
+          )}</div>`
+      )
+      .join("")}
+    </div>`;
 }
 
 const specifications = [
@@ -116,8 +122,10 @@ const specifications = [
 
 function renderTechnicalDetails(ticket) {
   return (
-    `<h4>Implementation notes</h4>` +
-    specifications.map(advice => renderRow(ticket, advice)).join("")
+    `<div class="notes">
+      <h4>Implementation notes</h4>` +
+    specifications.map(advice => renderRow(ticket, advice)).join("") +
+    "</div>"
   );
 }
 
