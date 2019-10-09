@@ -43,9 +43,15 @@ module.exports = function socketsInterface(wss) {
         grooming.chat(msg);
         sendAll("chat", msg);
       },
-      toggleAdvice(val) {
+      addAdvice(val) {
         const { ticketId, advice } = val;
-        if (grooming.toggleAdvice(ticketId, advice)) {
+        if (grooming.addAdvice(ticketId, advice)) {
+          sendAll("tickets", grooming.state.tickets);
+        }
+      },
+      removeAdvice(val) {
+        const { ticketId, advice } = val;
+        if (grooming.removeAdvice(ticketId, advice)) {
           sendAll("tickets", grooming.state.tickets);
         }
       },

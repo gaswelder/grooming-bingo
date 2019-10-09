@@ -51,6 +51,23 @@ export default function initTickets(grooming, container) {
     const { ticketId } = event.target.dataset;
     grooming.deleteTicket(ticketId);
   });
+
+  container.addEventListener("click", function(event) {
+    if (event.target.tagName != "BUTTON") {
+      return;
+    }
+    const { ticketId, advice } = event.target.dataset;
+
+    switch (event.target.name) {
+      case "remove-advice":
+        grooming.removeAdvice(ticketId, advice);
+        break;
+      case "add-advice":
+        grooming.addAdvice(ticketId, advice);
+
+        break;
+    }
+  });
 }
 
 const scores = [1, 2, 3, 5, 8, 13];
@@ -98,26 +115,34 @@ const specifications = [
 ];
 
 function renderTechnicalDetails(ticket) {
-  const is = advice => ticket.advices.includes(advice);
-  const id = i => `tn-${ticket.id}-${i}`;
-
   return (
-    `<table>
-      <caption>Implementation notes</caption>
-      ` +
-    specifications
-      .map(
-        (advice, i) =>
-          `<tr><td><label for="${id(i)}">${advice}</label></td>
-            <td>
-            <input id="${id(i)}" data-ticket-id="${
-            ticket.id
-          }" data-advice="${advice}" class="advice-toggle" type="checkbox" ${
-            is(advice) ? "checked" : ""
-          }>
-            </td></tr>`
-      )
-      .join("") +
-    "</table>"
+    `<h4>Implementation notes</h4>` +
+    specifications.map(advice => renderRow(ticket, advice)).join("")
   );
+}
+
+function renderRow(ticket, advice) {
+  const count = ticket.advices[advice];
+  return `<div class="advice-row ${count ? "active" : ""}">
+  ${advice}
+  ${renderChecks(count)}
+  <button name="remove-advice" data-advice="${advice}" data-ticket-id="${
+    ticket.id
+  }">&minus;</button>
+  <button name="add-advice" data-advice="${advice}" data-ticket-id="${
+    ticket.id
+  }">+</button>
+  </div>`;
+}
+
+function renderChecks(count) {
+  if (!count) {
+    return "";
+  }
+  let s = "";
+  const n = Math.ceil(count / 3);
+  for (let i = 0; i < n; i++) {
+    s += "+";
+  }
+  return s;
 }

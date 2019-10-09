@@ -89,8 +89,11 @@ export class Grooming {
   sendChatMessage(text) {
     this._send("chat", text);
   }
-  toggleAdvice(ticketId, advice) {
-    this._send("toggleAdvice", { ticketId, advice });
+  addAdvice(ticketId, advice) {
+    this._send("addAdvice", { ticketId, advice });
+  }
+  removeAdvice(ticketId, advice) {
+    this._send("removeAdvice", { ticketId, advice });
   }
   toggleVote(ticketId, score) {
     this._send("toggleVote", { ticketId, score });

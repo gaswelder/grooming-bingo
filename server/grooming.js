@@ -5,7 +5,7 @@ exports.Grooming = class Grooming {
         {
           id: 1,
           title: "пропозаль",
-          advices: [],
+          advices: {},
           votes: []
         }
       ],
@@ -17,16 +17,26 @@ exports.Grooming = class Grooming {
     this.state.chat.push(msg);
   }
 
-  toggleAdvice(ticketId, advice) {
+  addAdvice(ticketId, advice) {
     const ticket = this.state.tickets.find(t => t.id == ticketId);
     if (!ticket) {
       return false;
     }
-    const pos = ticket.advices.indexOf(advice);
-    if (pos >= 0) {
-      ticket.advices.splice(pos, 1);
+    if (!ticket.advices[advice]) {
+      ticket.advices[advice] = 1;
     } else {
-      ticket.advices.push(advice);
+      ticket.advices[advice]++;
+    }
+    return true;
+  }
+
+  removeAdvice(ticketId, advice) {
+    const ticket = this.state.tickets.find(t => t.id == ticketId);
+    if (!ticket) {
+      return false;
+    }
+    if (ticket.advices[advice]) {
+      ticket.advices[advice]--;
     }
     return true;
   }
