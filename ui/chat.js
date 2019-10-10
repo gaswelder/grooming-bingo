@@ -1,4 +1,5 @@
 import { elem } from "./elem";
+import Users from "./users.svelte";
 
 const specials = ["@here", "@ashkan", "@kek", "@topkek"];
 
@@ -6,7 +7,21 @@ export default function initChat(grooming, container) {
   container.innerHTML = `<div></div><form><textarea></textarea><button type="submit">Send (enter)</button></form>`;
   const form = container.querySelector("form");
   const textarea = container.querySelector("textarea");
-  const messages = container.querySelector("div");
+  const div = container.querySelector("div");
+  const usersContainer = document.createElement("span");
+  const messages = document.createElement("div");
+  div.appendChild(usersContainer);
+  div.appendChild(messages);
+
+  const usersC = new Users({
+    target: usersContainer,
+    props: {
+      users: []
+    }
+  });
+  grooming.onUsersChange(users => {
+    usersC.$set({ users });
+  });
 
   form.addEventListener("submit", event => {
     event.preventDefault();

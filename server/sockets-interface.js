@@ -11,11 +11,38 @@ module.exports = function socketsInterface(wss) {
    */
   const sockets = [];
 
+  function add(ws) {
+    sockets.push({ ws });
+    sendAll("users", sockets.map(s => s.user));
+  }
+
+  function remove(ws) {
+    const pos = sockets.findIndex(s => s.ws == ws);
+    sockets.splice(pos, 1);
+    sendAll("users", sockets.map(s => s.user));
+  }
+
+  function auth(ws, user) {
+    const pos = sockets.findIndex(s => s.ws == ws);
+    sockets[pos].user = user;
+    sendAll("users", sockets.map(s => s.user));
+  }
+
+  /**
+   * Sends a message to all connected sockets.
+   *
+   * @param {string} type Message type
+   * @param {any} val Message payload
+   */
+  function sendAll(type, val) {
+    const message = JSON.stringify({ type, val });
+    sockets.forEach(s => s.ws.send(message));
+  }
+
   wss.on("connection", function connection(ws) {
-    sockets.push(ws);
+    add(ws);
     ws.on("close", function() {
-      const pos = sockets.indexOf(ws);
-      sockets.splice(pos, 1);
+      remove(ws);
     });
     processSocket(ws);
   });
@@ -33,6 +60,7 @@ module.exports = function socketsInterface(wss) {
       auth(val) {
         user = val;
         send("init", grooming.state);
+        auth(ws, user);
       },
       chat(val) {
         const msg = {
@@ -78,16 +106,5 @@ module.exports = function socketsInterface(wss) {
       console.log(msg);
       handlers[msg.type](msg.val);
     });
-  }
-
-  /**
-   * Sends a message to all connected sockets.
-   *
-   * @param {string} type Message type
-   * @param {any} val Message payload
-   */
-  function sendAll(type, val) {
-    const s = JSON.stringify({ type, val });
-    sockets.forEach(ws => ws.send(s));
   }
 };

@@ -8,6 +8,12 @@ export class Grooming {
     setInterval(() => {
       this._send("echo", Date.now());
     }, 10000);
+
+    this.usersListeners = [];
+  }
+
+  onUsersChange(f) {
+    this.usersListeners.push(f);
   }
 
   onConnectionChange(f) {
@@ -47,6 +53,10 @@ export class Grooming {
       this.queue = [];
       tail.forEach(([type, val]) => this._send(type, val));
     });
+  }
+
+  _msg_users(users) {
+    this.usersListeners.forEach(f => f(users));
   }
 
   _msg_ohce(data) {
