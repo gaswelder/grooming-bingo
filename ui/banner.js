@@ -1,31 +1,14 @@
+import Banner from "./banner.svelte";
+
 export default function initBanner(grooming) {
-  grooming.onConnectionChange(function(online) {
-    if (online) {
-      hideBanner();
-    } else {
-      showBanner();
+  const banner = new Banner({
+    target: document.body,
+    props: {
+      online: false
     }
   });
 
-  const banner = document.createElement("div");
-  banner.innerText = "Socket closed, reconnecting";
-  banner.class = "banner";
-  document.body.appendChild(banner);
-  Object.assign(banner.style, {
-    position: "fixed",
-    left: "50%",
-    top: "50%",
-    background: "crimson",
-    color: "white",
-    padding: "1em",
-    borderRadius: "8px",
-    display: "none"
+  grooming.onConnectionChange(function(online) {
+    banner.$set({ online });
   });
-
-  function showBanner() {
-    banner.style.display = "block";
-  }
-  function hideBanner() {
-    banner.style.display = "none";
-  }
 }
