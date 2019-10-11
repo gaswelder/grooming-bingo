@@ -1,6 +1,5 @@
-import { elem } from "./elem";
 import Users from "./users.svelte";
-import Text from "./chat/text.svelte";
+import Message from "./chat/message.svelte";
 
 export default function initChat(grooming, container) {
   container.innerHTML = `<div></div><form><textarea></textarea><button type="submit">Send (enter)</button></form>`;
@@ -58,40 +57,7 @@ export default function initChat(grooming, container) {
 }
 
 function render(message) {
-  return elem("p", [
-    renderTime(message),
-    message.author + ": ",
-    renderText(message)
-  ]);
-}
-
-function renderTime(message) {
-  const time = document.createElement("time");
-  time.innerText = formatTime(message.timestamp);
-  return time;
-
-  function formatTime(timestamp) {
-    const d = new Date(timestamp);
-    return [
-      d
-        .getHours()
-        .toString()
-        .padStart(2, "0"),
-      d
-        .getMinutes()
-        .toString()
-        .padStart(2, "0")
-    ].join(":");
-  }
-}
-
-function renderText(message) {
-  const text = document.createElement("span");
-  new Text({
-    target: text,
-    props: {
-      message
-    }
-  });
-  return text;
+  const p = document.createElement("p");
+  new Message({ target: p, props: { message } });
+  return p;
 }
