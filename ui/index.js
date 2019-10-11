@@ -1,6 +1,6 @@
-import initChat from "./chat";
+import Chat from "./chat/chat.svelte";
+import Banner from "./banner.svelte";
 import initTickets from "./tickets";
-import initBanner from "./banner";
 import { Grooming } from "./grooming";
 
 window.initGrooming = function(root) {
@@ -23,7 +23,30 @@ window.initGrooming = function(root) {
   Notification.requestPermission();
 
   const grooming = new Grooming(username);
-  initChat(grooming, chatRoot);
+
+  new Chat({
+    target: chatRoot,
+    props: {
+      grooming
+    }
+  });
+
+  grooming.onChatMessage(message => {
+    if (document.hidden && Notification.permission == "granted") {
+      new Notification(`${message.author}: ${message.text}`);
+    }
+  });
+
   initTickets(grooming, ticketsRoot);
-  initBanner(grooming);
+
+  const banner = new Banner({
+    target: document.body,
+    props: {
+      online: false
+    }
+  });
+
+  grooming.onConnectionChange(function(online) {
+    banner.$set({ online });
+  });
 };
