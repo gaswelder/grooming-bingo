@@ -1,11 +1,11 @@
 <script>
   export let onSubmit;
 
+  let textarea;
+
   function submit(event) {
     event.preventDefault();
-    const textarea = event.target.querySelector("textarea");
-    onSubmit(textarea.value);
-    textarea.value = "";
+    send();
   }
 
   function keypress(event) {
@@ -13,9 +13,16 @@
       return;
     }
     event.preventDefault();
-    const textarea = event.target;
-    onSubmit(textarea.value);
+    send();
+  }
+
+  function send() {
+    const s = textarea.value.trim();
     textarea.value = "";
+    if (s == "") {
+      return;
+    }
+    onSubmit(s);
   }
 </script>
 
@@ -29,6 +36,6 @@
 </style>
 
 <form on:submit={submit}>
-  <textarea on:keypress={keypress} />
+  <textarea on:keypress={keypress} bind:this={textarea} />
   <button type="submit">Send (enter)</button>
 </form>
