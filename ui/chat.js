@@ -1,5 +1,5 @@
 import Users from "./users.svelte";
-import Message from "./chat/message.svelte";
+import Messages from "./chat/messages.svelte";
 
 export default function initChat(grooming, container) {
   container.innerHTML = `<div></div><form><textarea></textarea><button type="submit">Send (enter)</button></form>`;
@@ -43,21 +43,20 @@ export default function initChat(grooming, container) {
     send();
   });
 
-  grooming.onLoad(() => {
-    messages.innerHTML = "";
+  let m = [];
+
+  const messagesC = new Messages({
+    target: messages,
+    props: { messages: m }
   });
 
   grooming.onChatMessage(message => {
-    messages.appendChild(render(message));
+    m = m.concat(message);
+    messagesC.$set({ messages: m });
+
     messages.scrollBy(0, 1e6);
     if (document.hidden && Notification.permission == "granted") {
       new Notification(`${message.author}: ${message.text}`);
     }
   });
-}
-
-function render(message) {
-  const p = document.createElement("p");
-  new Message({ target: p, props: { message } });
-  return p;
 }
