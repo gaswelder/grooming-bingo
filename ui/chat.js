@@ -1,15 +1,23 @@
 import Users from "./users.svelte";
 import Messages from "./chat/messages.svelte";
+import Form from "./chat/form.svelte";
 
 export default function initChat(grooming, container) {
-  container.innerHTML = `<div></div><form><textarea></textarea><button type="submit">Send (enter)</button></form>`;
-  const form = container.querySelector("form");
-  const textarea = container.querySelector("textarea");
+  container.innerHTML = `<div></div>`;
   const div = container.querySelector("div");
   const usersContainer = document.createElement("span");
   const messages = document.createElement("div");
   div.appendChild(usersContainer);
   div.appendChild(messages);
+
+  new Form({
+    target: container,
+    props: {
+      onSubmit(text) {
+        grooming.sendChatMessage(text);
+      }
+    }
+  });
 
   const usersC = new Users({
     target: usersContainer,
@@ -19,28 +27,6 @@ export default function initChat(grooming, container) {
   });
   grooming.onUsersChange(users => {
     usersC.$set({ users });
-  });
-
-  form.addEventListener("submit", event => {
-    event.preventDefault();
-    send();
-  });
-
-  function send() {
-    grooming.sendChatMessage(textarea.value);
-    textarea.value = "";
-  }
-
-  container.addEventListener("keypress", function(event) {
-    if (
-      event.target.tagName != "TEXTAREA" ||
-      event.key != "Enter" ||
-      event.ctrlKey
-    ) {
-      return;
-    }
-    event.preventDefault();
-    send();
   });
 
   let m = [];
