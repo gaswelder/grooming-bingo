@@ -10,6 +10,7 @@ export class Grooming {
     }, 10000);
 
     this.usersListeners = [];
+    this.chatListeners = [];
   }
 
   onUsersChange(f) {
@@ -90,7 +91,7 @@ export class Grooming {
     this.loadListeners.push(func);
   }
   onChatMessage(func) {
-    this.chatListeners = [func];
+    this.chatListeners.push(func);
   }
   onTicketsChange(func) {
     this.ticketListeners = [func];

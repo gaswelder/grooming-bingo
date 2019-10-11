@@ -17,6 +17,14 @@
   }
 </script>
 
+<style>
+  time {
+    color: gray;
+    margin-right: 4px;
+    font-size: 90%;
+  }
+</style>
+
 <p>
   <time>{formatTime(message.timestamp)}</time>
   {message.author}:
