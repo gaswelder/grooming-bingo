@@ -1,7 +1,6 @@
 import { elem } from "./elem";
 import Users from "./users.svelte";
-
-const specials = ["@here", "@ashkan", "@kek", "@topkek"];
+import Text from "./chat/text.svelte";
 
 export default function initChat(grooming, container) {
   container.innerHTML = `<div></div><form><textarea></textarea><button type="submit">Send (enter)</button></form>`;
@@ -88,23 +87,11 @@ function renderTime(message) {
 
 function renderText(message) {
   const text = document.createElement("span");
-  if (specials.includes(message.text)) {
-    Object.assign(text.style, {
-      fontWeight: "bold",
-      color: "chartreuse",
-      background: "crimson"
-    });
-  }
-  let t = message.text;
-  for (const url of findLinks(t)) {
-    t = t.replace(url, `<a target="_blank" href="${url}">${url}</a>`);
-  }
-  text.innerHTML = t;
+  new Text({
+    target: text,
+    props: {
+      message
+    }
+  });
   return text;
-
-  function findLinks(text) {
-    const p = /https?:\/\/\w+\.\w+(\.\w+)*/g;
-    const unique = a => [...new Set(a)];
-    return unique([...text.matchAll(p)].map(m => m[0]));
-  }
 }
