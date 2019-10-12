@@ -1,8 +1,6 @@
 <script>
   import { onMount } from "svelte";
-  export let ticket;
-
-  let container;
+  export let ticket, onAdd, onRemove;
 
   const specifications = [
     "it's very easy",
@@ -18,33 +16,6 @@
     "does not make sense"
   ];
 
-  onMount(() => {
-    container.innerHTML = renderTechnicalDetails(ticket);
-  });
-
-  function renderTechnicalDetails(ticket) {
-    return (
-      `<div class="notes">
-      <h4>Implementation notes</h4>` +
-      specifications.map(advice => renderRow(ticket, advice)).join("") +
-      "</div>"
-    );
-  }
-
-  function renderRow(ticket, advice) {
-    const count = ticket.advices[advice];
-    return `<div class="advice-row ${count ? "active" : ""}">
-  ${advice}
-  ${renderChecks(count)}
-  <button name="remove-advice" data-advice="${advice}" data-ticket-id="${
-      ticket.id
-    }">&minus;</button>
-  <button name="add-advice" data-advice="${advice}" data-ticket-id="${
-      ticket.id
-    }">+</button>
-  </div>`;
-  }
-
   function renderChecks(count) {
     if (!count) {
       return "";
@@ -58,4 +29,17 @@
   }
 </script>
 
-<div class="notes" bind:this={container} />
+<div class="notes">
+  <div class="notes">
+    <h4>Implementation notes</h4>
+    {#each specifications as advice}
+      <div class="advice-row" class:active={ticket.advices[advice]}>
+        {advice} {renderChecks(ticket.advices[advice])}
+        <button on:click={() => onRemove(advice)} name="remove-advice">
+          &minus;
+        </button>
+        <button on:click={() => onAdd(advice)} name="add-advice">+</button>
+      </div>
+    {/each}
+  </div>
+</div>

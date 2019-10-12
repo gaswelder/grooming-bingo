@@ -4,7 +4,7 @@
 
   const scores = [1, 2, 3, 5, 8, 13].reverse();
 
-  const votes = score =>
+  $: votes = score =>
     ticket.votes
       .filter(vote => vote.score == score)
       .map(vote => vote.author)
@@ -18,8 +18,8 @@
     <div>
       <button
         class="score"
-        data-ticket-id={ticket.id}
         data-score={score}
+        on:click={() => onVote(score)}
         type="button">
         {score}
       </button>
