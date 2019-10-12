@@ -33,6 +33,43 @@
   });
 </script>
 
+<style>
+  .ticket {
+    display: inline-block;
+    background: white;
+    border-radius: 3px;
+    padding: 1em;
+    margin: 0.5em;
+    box-shadow: 0 1px 0 rgba(9, 30, 66, 0.25);
+    margin-bottom: 8px;
+    min-height: 20px;
+    position: relative;
+  }
+  .ticket button[name="delete"] {
+    display: block;
+    border: none;
+    font-size: 20px;
+    font-weight: normal;
+    width: 20px;
+    height: 20px;
+    padding: 0px;
+    color: #6b778c;
+    cursor: pointer;
+    position: absolute;
+    right: 8px;
+    top: 8px;
+    background: transparent;
+  }
+  .ticket button[name="delete"]:hover {
+    background: rgba(9, 30, 66, 0.08);
+  }
+  .ticket h3 {
+    color: #172b4d;
+    margin: 8px 0;
+    line-height: 20px;
+  }
+</style>
+
 {#each tickets as ticket}
   <div class="ticket">
     <h3>
