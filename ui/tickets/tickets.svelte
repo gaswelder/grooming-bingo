@@ -1,7 +1,7 @@
 <script>
   import { onMount } from "svelte";
-  import Votes from "./tickets/votes.svelte";
-  import TechnicalDetails from "./tickets/technical-details.svelte";
+  import Votes from "./votes.svelte";
+  import TechnicalDetails from "./technical-details.svelte";
 
   export let grooming;
 

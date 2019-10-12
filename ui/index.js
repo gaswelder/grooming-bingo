@@ -1,7 +1,7 @@
 import Chat from "./chat/chat.svelte";
 import Banner from "./banner.svelte";
 import { Grooming } from "./grooming";
-import Tickets from "./tickets.svelte";
+import Tickets from "./tickets/tickets.svelte";
 
 // const ding = new Audio(
 //   "https://notificationsounds.com/soundfiles/1bb91f73e9d31ea2830a5e73ce3ed328/file-sounds-1091-graceful.mp3"
