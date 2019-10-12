@@ -1,7 +1,11 @@
 import Chat from "./chat/chat.svelte";
 import Banner from "./banner.svelte";
-import initTickets from "./tickets";
 import { Grooming } from "./grooming";
+import Tickets from "./tickets.svelte";
+
+// const ding = new Audio(
+//   "https://notificationsounds.com/soundfiles/1bb91f73e9d31ea2830a5e73ce3ed328/file-sounds-1091-graceful.mp3"
+// );
 
 window.initGrooming = function(root) {
   const chatRoot = document.createElement("div");
@@ -37,7 +41,10 @@ window.initGrooming = function(root) {
     }
   });
 
-  initTickets(grooming, ticketsRoot);
+  new Tickets({
+    target: ticketsRoot,
+    props: { grooming }
+  });
 
   const banner = new Banner({
     target: document.body,
