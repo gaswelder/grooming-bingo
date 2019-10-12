@@ -1,5 +1,8 @@
 <script>
   import { onMount } from "svelte";
+  import Votes from "./tickets/votes.svelte";
+  import TechnicalDetails from "./tickets/technical-details.svelte";
+  import Ticket from "./tickets/ticket.svelte";
 
   export let grooming;
   let container;
@@ -75,86 +78,12 @@
   const scores = [1, 2, 3, 5, 8, 13].reverse();
 
   function renderTicket(ticket) {
-    return `<div class="ticket">
-    <h3>${ticket.title} <button name="delete" data-ticket-id="${
-      ticket.id
-    }">&times;</button></h3>
-      <div>
-      ${renderTechnicalDetails(ticket)}
-      ${renderVotes(ticket)}
-      </div>
-    </div>`;
-  }
-
-  function renderVotes(ticket) {
-    const votes = score =>
-      ticket.votes
-        .filter(vote => vote.score == score)
-        .map(vote => vote.author)
-        .join(", ");
-
-    return `<div class="votes">
-    <h4>Votes</h4>
-    ${scores
-      .map(
-        score =>
-          `<div><button class="score" data-ticket-id="${
-            ticket.id
-          }" data-score="${score}" type="button">${score}</button> ${votes(
-            score
-          )}</div>`
-      )
-      .join("")}
-    </div>`;
-  }
-
-  const specifications = [
-    "it's very easy",
-    "пропозаль",
-    "папап",
-    "I'm not sure",
-    "it's a different card",
-    "there's a card for that",
-    "copypest",
-    "exactly",
-    "I have to look at the code",
-    "makes sense",
-    "does not make sense"
-  ];
-
-  function renderTechnicalDetails(ticket) {
-    return (
-      `<div class="notes">
-      <h4>Implementation notes</h4>` +
-      specifications.map(advice => renderRow(ticket, advice)).join("") +
-      "</div>"
-    );
-  }
-
-  function renderRow(ticket, advice) {
-    const count = ticket.advices[advice];
-    return `<div class="advice-row ${count ? "active" : ""}">
-  ${advice}
-  ${renderChecks(count)}
-  <button name="remove-advice" data-advice="${advice}" data-ticket-id="${
-      ticket.id
-    }">&minus;</button>
-  <button name="add-advice" data-advice="${advice}" data-ticket-id="${
-      ticket.id
-    }">+</button>
-  </div>`;
-  }
-
-  function renderChecks(count) {
-    if (!count) {
-      return "";
-    }
-    let s = "";
-    const n = Math.ceil(count / 2);
-    for (let i = 0; i < n; i++) {
-      s += "+";
-    }
-    return s;
+    const div = document.createElement("div");
+    new Ticket({
+      target: div,
+      props: { ticket }
+    });
+    return div.innerHTML;
   }
 </script>
 
