@@ -1,6 +1,17 @@
 import State from "../lib/state";
 import { PersistentSocket } from "../lib/persistent-socket";
 
+function matchesFilter(change, filter = []) {
+  const [path, op] = filter;
+  if (op && op != change[0]) {
+    return false;
+  }
+  if (path && !change[1].join(",").startsWith(path.join(","))) {
+    return false;
+  }
+  return true;
+}
+
 export class Grooming {
   constructor(username) {
     this.username = username;
@@ -23,7 +34,11 @@ export class Grooming {
           break;
         case "change":
           this.state1.apply(val);
-          this.changeListeners.forEach(f => f(this.state1.state));
+          this.changeListeners.forEach(listener => {
+            if (matchesFilter(val, listener.filter)) {
+              listener.f(this.state1.state);
+            }
+          });
           break;
         case "ohce":
           console.info("RTT time", Date.now() - val, "ms");
@@ -39,9 +54,7 @@ export class Grooming {
   }
 
   onChange(f, filter) {
-    this.changeListeners.push(function(change) {
-      f(change);
-    });
+    this.changeListeners.push({ f, filter });
   }
   onConnectionChange(f) {
     this.socket.onConnectionChange(f);

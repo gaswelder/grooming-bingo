@@ -9,10 +9,19 @@
   let users = [];
   let messages = [];
 
-  grooming.onChange(state => {
-    messages = state.chat;
-    users = state.users;
-  });
+  grooming.onChange(
+    state => {
+      messages = state.chat;
+    },
+    [["chat"]]
+  );
+
+  grooming.onChange(
+    state => {
+      users = state.users;
+    },
+    [["users"]]
+  );
 
   function submit(text) {
     grooming.sendChatMessage(text);
