@@ -1,3 +1,5 @@
+import State from "../lib/state";
+
 export class Grooming {
   constructor(username) {
     this.username = username;
@@ -11,6 +13,9 @@ export class Grooming {
 
     this.usersListeners = [];
     this.chatListeners = [];
+
+    this.state = new State({});
+    console.log(this.state);
   }
 
   onUsersChange(f) {
