@@ -34,7 +34,7 @@
 </script>
 
 <style>
-  .root {
+  div {
     display: flex;
     flex-direction: column;
     border-left: dashed 1px gray;
@@ -44,7 +44,7 @@
   }
 </style>
 
-<div class="root">
+<div>
   <Users {users} />
   <Messages {messages} />
   <Form onSubmit={submit} />
