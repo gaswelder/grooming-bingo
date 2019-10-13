@@ -11,8 +11,6 @@ export class Grooming {
       this._send("echo", Date.now());
     }, 10000);
 
-    this.usersListeners = [];
-    this.chatListeners = [];
     this.changeListeners = [];
 
     this.state1 = new State({});
@@ -21,10 +19,6 @@ export class Grooming {
 
   onChange(f) {
     this.changeListeners.push(f);
-  }
-
-  onUsersChange(f) {
-    this.usersListeners.push(f);
   }
 
   onConnectionChange(f) {
@@ -69,16 +63,6 @@ export class Grooming {
   _msg_change(command) {
     this.state1.apply(command);
     this.changeListeners.forEach(f => f(this.state1.state));
-
-    const [op, path, val] = command;
-    if (op == "push" && path.toString() == "chat") {
-      this.state.chat.push(val);
-      this.chatListeners.forEach(fn => fn(val));
-    }
-  }
-
-  _msg_users(users) {
-    this.usersListeners.forEach(f => f(users));
   }
 
   _msg_ohce(data) {
@@ -89,7 +73,7 @@ export class Grooming {
     this.state1 = new State(data);
     this.state = data;
     this.loadListeners.forEach(fn => fn(data));
-    this.state.chat.forEach(msg => this.chatListeners.forEach(fn => fn(msg)));
+    // this.state.chat.forEach(msg => this.chatListeners.forEach(fn => fn(msg)));
   }
 
   _send(type, val) {
@@ -108,7 +92,7 @@ export class Grooming {
     this.loadListeners.push(func);
   }
   onChatMessage(func) {
-    this.chatListeners.push(func);
+    // this.chatListeners.push(func);
   }
   onTicketsChange(func) {
     this.ticketListeners = [func];

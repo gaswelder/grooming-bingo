@@ -13,19 +13,19 @@ module.exports = function socketsInterface(wss) {
 
   function add(ws) {
     sockets.push({ ws });
-    sendAll("users", sockets.map(s => s.user));
   }
 
   function remove(ws) {
     const pos = sockets.findIndex(s => s.ws == ws);
+    const user = sockets[pos].user;
+    grooming.removeUser(user);
     sockets.splice(pos, 1);
-    sendAll("users", sockets.map(s => s.user));
   }
 
   function auth(ws, user) {
     const pos = sockets.findIndex(s => s.ws == ws);
     sockets[pos].user = user;
-    sendAll("users", sockets.map(s => s.user));
+    grooming.addUser(user);
   }
 
   /**

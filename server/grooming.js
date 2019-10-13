@@ -4,9 +4,19 @@ exports.Grooming = class Grooming extends State {
   constructor() {
     super({
       tickets: [],
-      chat: []
+      chat: [],
+      users: []
     });
     this.createTicket("Пропозаль");
+  }
+
+  addUser(user) {
+    this.push(["users"], user);
+  }
+
+  removeUser(user) {
+    const pos = this.state.users.indexOf(user);
+    this.del(["users", pos]);
   }
 
   chat(msg) {

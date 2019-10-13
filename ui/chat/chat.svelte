@@ -6,16 +6,12 @@
 
   export let grooming;
 
-  let users = ["koko"];
+  let users = [];
   let messages = [];
 
-  onMount(() => {
-    grooming.onUsersChange(newUsers => {
-      users = newUsers;
-    });
-    grooming.onChange(state => {
-      messages = state.chat;
-    });
+  grooming.onChange(state => {
+    messages = state.chat;
+    users = state.users;
   });
 
   function submit(text) {
