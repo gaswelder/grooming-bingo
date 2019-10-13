@@ -17,15 +17,12 @@ module.exports = function socketsInterface(wss) {
 
   function remove(ws) {
     const pos = sockets.findIndex(s => s.ws == ws);
-    const user = sockets[pos].user;
-    grooming.removeUser(user);
     sockets.splice(pos, 1);
   }
 
   function auth(ws, user) {
     const pos = sockets.findIndex(s => s.ws == ws);
     sockets[pos].user = user;
-    grooming.addUser(user);
   }
 
   /**
@@ -57,6 +54,10 @@ module.exports = function socketsInterface(wss) {
       ws.send(JSON.stringify({ type, val }));
     }
 
+    ws.on("close", function() {
+      grooming.removeUser(user);
+    });
+
     const handlers = {
       echo(val) {
         send("ohce", val);
@@ -65,6 +66,7 @@ module.exports = function socketsInterface(wss) {
         user = val;
         send("init", grooming.state);
         auth(ws, user);
+        grooming.addUser(user);
       },
       chat(val) {
         const msg = {
