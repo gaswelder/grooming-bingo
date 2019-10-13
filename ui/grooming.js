@@ -14,8 +14,23 @@ export class Grooming {
     this.socket = new PersistentSocket(url);
     this.socket.onConnect(() => this.send("auth", this.username));
     this.socket.onMessage(message => {
-      const msg = JSON.parse(message.data);
-      this["_msg_" + msg.type].call(this, msg.val);
+      const { type, val } = JSON.parse(message.data);
+      switch (type) {
+        case "init":
+          this.state1 = new State(val);
+          this.state = val;
+          this.loadListeners.forEach(fn => fn(val));
+          break;
+        case "change":
+          this.state1.apply(val);
+          this.changeListeners.forEach(f => f(this.state1.state));
+          break;
+        case "ohce":
+          console.info("RTT time", Date.now() - val, "ms");
+          break;
+        default:
+          console.warning("Unhandled message", type, val);
+      }
     });
 
     setInterval(() => {
@@ -23,33 +38,13 @@ export class Grooming {
     }, 10000);
   }
 
-  onChange(f) {
-    this.changeListeners.push(f);
+  onChange(f, filter) {
+    this.changeListeners.push(function(change) {
+      f(change);
+    });
   }
-
   onConnectionChange(f) {
     this.socket.onConnectionChange(f);
-  }
-
-  _msg_change(command) {
-    this.state1.apply(command);
-    this.changeListeners.forEach(f => f(this.state1.state));
-  }
-
-  _msg_ohce(data) {
-    console.log("RTT time", Date.now() - data, "ms");
-  }
-
-  _msg_init(data) {
-    this.state1 = new State(data);
-    this.state = data;
-    this.loadListeners.forEach(fn => fn(data));
-    // this.state.chat.forEach(msg => this.chatListeners.forEach(fn => fn(msg)));
-  }
-
-  send(type, val) {
-    const message = JSON.stringify({ type, val });
-    this.socket.send(message);
   }
   onLoad(func) {
     this.loadListeners.push(func);
@@ -58,6 +53,10 @@ export class Grooming {
     // this.chatListeners.push(func);
   }
 
+  send(type, val) {
+    const message = JSON.stringify({ type, val });
+    this.socket.send(message);
+  }
   sendChatMessage(text) {
     this.send("chat", text);
   }
