@@ -6,8 +6,10 @@
 
   const specifications = [
     "it's very easy",
+    "it's not that hard",
     "пропозаль",
     "папап",
+    "тогль",
     "I'm not sure",
     "it's a different card",
     "there's a card for that",
@@ -15,7 +17,8 @@
     "exactly",
     "I have to look at the code",
     "makes sense",
-    "does not make sense"
+    "does not make sense",
+    "calculate"
   ];
 
   function customInputKeypress(event) {
