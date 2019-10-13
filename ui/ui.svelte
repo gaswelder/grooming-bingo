@@ -12,10 +12,17 @@
   });
 </script>
 
+<style>
+  div.ticketsRoot {
+    overflow-y: scroll;
+    flex: 1;
+  }
+</style>
+
 <div class="ticketsRoot">
   <Tickets {grooming} />
 </div>
-<div class="chatRoot">
+<div>
   <Chat {grooming} />
 </div>
 <Banner {online} />

@@ -20,9 +20,7 @@
   .advice-row {
     position: relative;
     padding-right: 60px;
-    min-width: 200px;
     line-height: 26px;
-    color: gray;
   }
   .advice-row button {
     visibility: hidden;
@@ -55,18 +53,13 @@
   }
 </style>
 
-<div class="notes">
-  <div class="notes">
-    <h4>Implementation notes</h4>
-    {#each Object.keys(ticket.advices) as advice}
-      <div class="advice-row">
-        {advice} {renderChecks(ticket.advices[advice])}
-        <button on:click={() => onRemove(advice)} name="remove-advice">
-          &minus;
-        </button>
-        <button on:click={() => onAdd(advice)} name="add-advice">+</button>
-      </div>
-    {/each}
-    <Menu onSelect={onAdd} selected={Object.keys(ticket.advices)} />
+{#each Object.keys(ticket.advices) as advice}
+  <div class="advice-row">
+    {advice} {renderChecks(ticket.advices[advice])}
+    <button on:click={() => onRemove(advice)} name="remove-advice">
+      &minus;
+    </button>
+    <button on:click={() => onAdd(advice)} name="add-advice">+</button>
   </div>
-</div>
+{/each}
+<Menu onSelect={onAdd} selected={Object.keys(ticket.advices)} />

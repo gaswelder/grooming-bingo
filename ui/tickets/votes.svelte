@@ -39,20 +39,15 @@
   }
 </style>
 
-<div class="votes">
-  <h4>Votes</h4>
-
-  {#each scores as score}
-    <div>
-      <button
-        class="score"
-        data-score={score}
-        on:click={() => onVote(score)}
-        type="button">
-        {score}
-      </button>
-      {votes(score)}
-    </div>
-  {/each}
-
-</div>
+{#each scores as score}
+  <div>
+    <button
+      class="score"
+      data-score={score}
+      on:click={() => onVote(score)}
+      type="button">
+      {score}
+    </button>
+    {votes(score)}
+  </div>
+{/each}

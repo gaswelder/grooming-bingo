@@ -44,6 +44,7 @@
     margin-bottom: 8px;
     min-height: 20px;
     position: relative;
+    vertical-align: top;
   }
   .ticket button[name="delete"] {
     display: block;
@@ -73,13 +74,17 @@
         &times;
       </button>
     </h3>
-    <Votes {ticket} onVote={score => toggleVote(ticket, score)} />
+
+    <h4>Technical details</h4>
     <TechnicalDetails
       {ticket}
       onAdd={advice => grooming.addAdvice(ticket.id, advice)}
       onRemove={advice => grooming.removeAdvice(ticket.id, advice)} />
+    <h4>Votes</h4>
+    <Votes {ticket} onVote={score => toggleVote(ticket, score)} />
   </div>
 {/each}
+
 <form on:submit={addTicket}>
   <input required bind:value={newTicketName} />
   <button>Add ticket</button>
