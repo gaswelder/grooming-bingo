@@ -13,8 +13,8 @@
     grooming.onUsersChange(newUsers => {
       users = newUsers;
     });
-    grooming.onChatMessage(message => {
-      messages = messages.concat(message);
+    grooming.onChange(state => {
+      messages = state.chat;
     });
   });
 

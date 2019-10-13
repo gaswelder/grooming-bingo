@@ -73,7 +73,6 @@ module.exports = function socketsInterface(wss) {
           timestamp: Date.now()
         };
         grooming.chat(msg);
-        sendAll("chat", msg);
       },
       addAdvice(val) {
         const { ticketId, advice } = val;
