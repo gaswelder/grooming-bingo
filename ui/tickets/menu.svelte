@@ -17,6 +17,17 @@
     "makes sense",
     "does not make sense"
   ];
+
+  function customInputKeypress(event) {
+    if (event.key != "Enter") {
+      return;
+    }
+    open = false;
+    const val = event.target.value.trim();
+    if (val != "") {
+      onSelect(event.target.value);
+    }
+  }
 </script>
 
 <style>
@@ -72,5 +83,6 @@
         </li>
       {/each}
     </ul>
+    <input on:keypress={customInputKeypress} />
   </Popover>
 {/if}
