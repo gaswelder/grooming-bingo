@@ -6,7 +6,7 @@
 
   function process(text) {
     const buffer = document.createElement("div");
-    buffer.innerHTML = withLinks(text);
+    buffer.innerHTML = withLinks(withImages(text));
     for (const node of buffer.childNodes) {
       if (node.nodeType == node.TEXT_NODE) {
         node.textContent = node.textContent
@@ -16,6 +16,14 @@
     }
     return buffer.innerHTML;
   }
+
+  function withImages(text) {
+    for (const m of text.matchAll(/\{(data:image\/\w+;base64,.+)\}/)) {
+      const url = m[1];
+      text = text.replace(m[0], `<img src="${url}">`);
+    }
+    return text;
+  }
 </script>
 
 <style>
@@ -23,6 +31,10 @@
     font-weight: bold;
     color: chartreuse;
     background: crimson;
+  }
+
+  span :global(img) {
+    max-width: 100%;
   }
 </style>
 

@@ -24,6 +24,46 @@
     }
     onSubmit(s);
   }
+
+  function toDataURL(file) {
+    return new Promise(ok => {
+      const reader = new FileReader();
+      reader.onload = function(event) {
+        ok(event.target.result);
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  function getImageFile(event) {
+    for (const item of event.clipboardData.items) {
+      if (item.kind === "file") {
+        return item.getAsFile();
+      }
+    }
+    return null;
+  }
+
+  function onPaste(event) {
+    const file = getImageFile(event);
+    if (!file) {
+      return;
+    }
+    event.preventDefault();
+    const t = event.target;
+
+    console.log(event.target.selectionStart, event);
+    toDataURL(file).then(url => {
+      const a = t.selectionStart;
+      const b = t.selectionEnd;
+      t.value =
+        t.value.substring(0, a) +
+        "{" +
+        url +
+        "}" +
+        t.value.substring(b, t.value.length);
+    });
+  }
 </script>
 
 <style>
@@ -36,6 +76,6 @@
 </style>
 
 <form on:submit={submit}>
-  <textarea on:keypress={keypress} bind:this={textarea} />
+  <textarea on:keypress={keypress} bind:this={textarea} on:paste={onPaste} />
   <button type="submit">Send (enter)</button>
 </form>
