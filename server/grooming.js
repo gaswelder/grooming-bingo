@@ -1,24 +1,12 @@
-const state = require("../state");
+const State = require("./state");
 
-exports.Grooming = class Grooming {
+exports.Grooming = class Grooming extends State {
   constructor() {
-    this.state = {
+    super({
       tickets: [],
       chat: []
-    };
+    });
     this.createTicket("Пропозаль");
-  }
-
-  push(path, val) {
-    this.state = state.push(this.state, path, val);
-  }
-
-  set(path, val) {
-    this.state = state.set(this.state, path, val);
-  }
-
-  del(path) {
-    this.state = state.del(this.state, path);
   }
 
   chat(msg) {

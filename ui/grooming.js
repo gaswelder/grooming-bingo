@@ -56,6 +56,10 @@ export class Grooming {
     });
   }
 
+  _msg_change(val) {
+    console.log("change", val);
+  }
+
   _msg_users(users) {
     this.usersListeners.forEach(f => f(users));
   }

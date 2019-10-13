@@ -39,6 +39,10 @@ module.exports = function socketsInterface(wss) {
     sockets.forEach(s => s.ws.send(message));
   }
 
+  grooming.onChange(change => {
+    sendAll("change", change);
+  });
+
   wss.on("connection", function connection(ws) {
     add(ws);
     ws.on("close", function() {
