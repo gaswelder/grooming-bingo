@@ -1,20 +1,26 @@
 import State from "../lib/state";
+import { PersistentSocket } from "../lib/persistent-socket";
 
 export class Grooming {
   constructor(username) {
     this.username = username;
-    this.queue = [];
     this.loadListeners = [];
-    this.connectionListeners = [];
-    this.connect();
-    setInterval(() => {
-      this._send("echo", Date.now());
-    }, 10000);
-
     this.changeListeners = [];
-
     this.state1 = new State({});
-    console.log(this.state1);
+
+    const url = location.host.includes("localhost")
+      ? `ws://${location.host}/grooming`
+      : `wss://${location.host}/grooming`;
+    this.socket = new PersistentSocket(url);
+    this.socket.onConnect(() => this.send("auth", this.username));
+    this.socket.onMessage(message => {
+      const msg = JSON.parse(message.data);
+      this["_msg_" + msg.type].call(this, msg.val);
+    });
+
+    setInterval(() => {
+      this.send("echo", Date.now());
+    }, 10000);
   }
 
   onChange(f) {
@@ -22,42 +28,7 @@ export class Grooming {
   }
 
   onConnectionChange(f) {
-    this.connectionListeners.push(f);
-  }
-
-  setSocket(ws) {
-    this.ws = ws;
-    this.connectionListeners.forEach(f => f(ws != null));
-  }
-
-  url() {
-    if (location.host.includes("localhost")) {
-      return `ws://${location.host}/grooming`;
-    }
-    return `wss://${location.host}/grooming`;
-  }
-
-  connect() {
-    const ws = new WebSocket(this.url());
-    ws.addEventListener("error", () => {
-      setTimeout(() => this.connect(), 3000);
-    });
-    ws.addEventListener("open", () => {
-      ws.addEventListener("close", () => {
-        this.setSocket(null);
-        this.connect();
-      });
-      ws.addEventListener("message", message => {
-        const msg = JSON.parse(message.data);
-        this["_msg_" + msg.type].call(this, msg.val);
-      });
-
-      this.setSocket(ws);
-      this._send("auth", this.username);
-      const tail = this.queue;
-      this.queue = [];
-      tail.forEach(([type, val]) => this._send(type, val));
-    });
+    this.socket.onConnectionChange(f);
   }
 
   _msg_change(command) {
@@ -76,13 +47,9 @@ export class Grooming {
     // this.state.chat.forEach(msg => this.chatListeners.forEach(fn => fn(msg)));
   }
 
-  _send(type, val) {
-    if (!this.ws) {
-      this.queue.push([type, val]);
-    } else {
-      const data = { type, val };
-      this.ws.send(JSON.stringify(data));
-    }
+  send(type, val) {
+    const message = JSON.stringify({ type, val });
+    this.socket.send(message);
   }
   onLoad(func) {
     this.loadListeners.push(func);
@@ -92,21 +59,21 @@ export class Grooming {
   }
 
   sendChatMessage(text) {
-    this._send("chat", text);
+    this.send("chat", text);
   }
   addAdvice(ticketId, advice) {
-    this._send("addAdvice", { ticketId, advice });
+    this.send("addAdvice", { ticketId, advice });
   }
   removeAdvice(ticketId, advice) {
-    this._send("removeAdvice", { ticketId, advice });
+    this.send("removeAdvice", { ticketId, advice });
   }
   toggleVote(ticketId, score) {
-    this._send("toggleVote", { ticketId, score });
+    this.send("toggleVote", { ticketId, score });
   }
   createTicket(title) {
-    this._send("createTicket", { title });
+    this.send("createTicket", { title });
   }
   deleteTicket(ticketId) {
-    this._send("deleteTicket", { ticketId });
+    this.send("deleteTicket", { ticketId });
   }
 }
