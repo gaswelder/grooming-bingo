@@ -28,8 +28,8 @@
   grooming.onLoad(function(state) {
     tickets = state.tickets;
   });
-  grooming.onTicketsChange(function(newTickets) {
-    tickets = newTickets;
+  grooming.onChange(function(state) {
+    tickets = state.tickets;
   });
 </script>
 

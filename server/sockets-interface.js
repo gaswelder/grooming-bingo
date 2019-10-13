@@ -76,32 +76,23 @@ module.exports = function socketsInterface(wss) {
       },
       addAdvice(val) {
         const { ticketId, advice } = val;
-        if (grooming.addAdvice(ticketId, advice)) {
-          sendAll("tickets", grooming.state.tickets);
-        }
+        grooming.addAdvice(ticketId, advice);
       },
       removeAdvice(val) {
         const { ticketId, advice } = val;
-        if (grooming.removeAdvice(ticketId, advice)) {
-          sendAll("tickets", grooming.state.tickets);
-        }
+        grooming.removeAdvice(ticketId, advice);
       },
       toggleVote(val) {
         const { ticketId, score } = val;
-        if (grooming.toggleVote(user, ticketId, score)) {
-          sendAll("tickets", grooming.state.tickets);
-        }
+        grooming.toggleVote(user, ticketId, score);
       },
       deleteTicket(val) {
         const { ticketId } = val;
-        if (grooming.deleteTicket(ticketId)) {
-          sendAll("tickets", grooming.state.tickets);
-        }
+        grooming.deleteTicket(ticketId);
       },
       createTicket(val) {
         const { title } = val;
         grooming.createTicket(title);
-        sendAll("tickets", grooming.state.tickets);
       }
     };
     ws.on("message", function incoming(message) {

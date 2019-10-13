@@ -84,18 +84,11 @@ export class Grooming {
       this.ws.send(JSON.stringify(data));
     }
   }
-  _msg_tickets(tickets) {
-    this.state.tickets = tickets;
-    this.ticketListeners.forEach(fn => fn(this.state.tickets));
-  }
   onLoad(func) {
     this.loadListeners.push(func);
   }
   onChatMessage(func) {
     // this.chatListeners.push(func);
-  }
-  onTicketsChange(func) {
-    this.ticketListeners = [func];
   }
 
   sendChatMessage(text) {
