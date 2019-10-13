@@ -23,6 +23,11 @@
     [["users"]]
   );
 
+  grooming.onLoad(state => {
+    users = state.users;
+    messages = state.chat;
+  });
+
   function submit(text) {
     grooming.sendChatMessage(text);
   }
