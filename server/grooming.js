@@ -1,3 +1,5 @@
+const state = require("../state");
+
 exports.Grooming = class Grooming {
   constructor() {
     this.state = {
@@ -7,45 +9,57 @@ exports.Grooming = class Grooming {
     this.createTicket("Пропозаль");
   }
 
+  push(path, val) {
+    this.state = state.push(this.state, path, val);
+  }
+
+  set(path, val) {
+    this.state = state.set(this.state, path, val);
+  }
+
+  del(path) {
+    this.state = state.del(this.state, path);
+  }
+
   chat(msg) {
-    this.state.chat.push(msg);
+    this.push(["chat"], msg);
   }
 
   addAdvice(ticketId, advice) {
-    const ticket = this.state.tickets.find(t => t.id == ticketId);
-    if (!ticket) {
+    const pos = this.state.tickets.findIndex(t => t.id == ticketId);
+    if (pos < 0) {
       return false;
     }
-    if (!ticket.advices[advice]) {
-      ticket.advices[advice] = 1;
-    } else {
-      ticket.advices[advice]++;
-    }
+    const newVal = (this.state.tickets[pos].advices[advice] || 0) + 1;
+    this.set(["tickets", pos, "advices", advice], newVal);
     return true;
   }
 
   removeAdvice(ticketId, advice) {
-    const ticket = this.state.tickets.find(t => t.id == ticketId);
-    if (!ticket) {
+    const pos = this.state.tickets.findIndex(t => t.id == ticketId);
+    if (pos < 0) {
       return false;
     }
-    if (ticket.advices[advice]) {
-      ticket.advices[advice]--;
-    }
+    const newVal = Math.max(
+      (this.state.tickets[pos].advices[advice] || 0) - 1,
+      0
+    );
+    this.set(["tickets", pos, "advices", advice], newVal);
     return true;
   }
 
   toggleVote(user, ticketId, score) {
-    const ticket = this.state.tickets.find(t => t.id == ticketId);
-    if (!ticket) {
+    const ticketPos = this.state.tickets.findIndex(t => t.id == ticketId);
+    if (ticketPos < 0) {
       return false;
     }
-    const pos = ticket.votes.findIndex(
+    const ticket = this.state.tickets[ticketPos];
+    const votePos = ticket.votes.findIndex(
       v => v.author == user && v.score == score
     );
     // If this is an existing vote, just remove it.
-    if (pos >= 0) {
-      ticket.votes.splice(pos, 1);
+    if (votePos >= 0) {
+      this.del(["tickets", ticketPos, "votes", votePos]);
       return true;
     }
 
@@ -56,13 +70,15 @@ exports.Grooming = class Grooming {
       .filter(vote => vote.author == user)
       .map(vote => vote.score)
       .sort((a, b) => Math.abs(b - score) - Math.abs(a - score));
-    const remove = s =>
-      (ticket.votes = ticket.votes.filter(
+    const remove = s => {
+      const newVotes = ticket.votes.filter(
         v => v.author == user && v.score == s
-      ));
+      );
+      this.set(["tickets", ticketPos, "votes"], newVotes);
+    };
     existingScores.slice(1).forEach(remove);
 
-    ticket.votes.push({
+    this.push(["tickets", ticketPos, "votes"], {
       author: user,
       score
     });
@@ -74,12 +90,12 @@ exports.Grooming = class Grooming {
     if (pos < 0) {
       return false;
     }
-    this.state.tickets.splice(pos, 1);
+    this.del(["tickets", pos]);
     return true;
   }
 
   createTicket(title) {
-    this.state.tickets.push({
+    this.push(["tickets"], {
       id: Date.now(),
       title,
       advices: {},
