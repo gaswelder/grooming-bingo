@@ -1,4 +1,4 @@
-const State = require("./state");
+const State = require("../lib/state");
 
 exports.Grooming = class Grooming extends State {
   constructor() {
