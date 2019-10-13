@@ -13,9 +13,14 @@ export class Grooming {
 
     this.usersListeners = [];
     this.chatListeners = [];
+    this.changeListeners = [];
 
-    this.state = new State({});
-    console.log(this.state);
+    this.state1 = new State({});
+    console.log(this.state1);
+  }
+
+  onChange(f) {
+    this.changeListeners.push(f);
   }
 
   onUsersChange(f) {
@@ -62,7 +67,9 @@ export class Grooming {
   }
 
   _msg_change(command) {
-    console.log("change", command);
+    this.state1.apply(command);
+    this.changeListeners.forEach(f => f(this.state1.state));
+
     const [op, path, val] = command;
     if (op == "push" && path.toString() == "chat") {
       this.state.chat.push(val);
@@ -79,6 +86,7 @@ export class Grooming {
   }
 
   _msg_init(data) {
+    this.state1 = new State(data);
     this.state = data;
     this.loadListeners.forEach(fn => fn(data));
     this.state.chat.forEach(msg => this.chatListeners.forEach(fn => fn(msg)));
