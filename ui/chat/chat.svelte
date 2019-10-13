@@ -1,13 +1,14 @@
 <script>
   import Form from "./form.svelte";
-  import Messages from "./messages.svelte";
+  import Message from "./message.svelte";
   import Users from "../users.svelte";
-  import { onMount } from "svelte";
+  import { afterUpdate } from "svelte";
 
   export let grooming;
 
   let users = [];
   let messages = [];
+  let messagesContainer;
 
   grooming.onChange(
     state => {
@@ -28,6 +29,10 @@
     messages = state.chat;
   });
 
+  afterUpdate(() => {
+    messagesContainer.scrollBy(0, 1e6);
+  });
+
   function submit(text) {
     grooming.sendChatMessage(text);
   }
@@ -42,10 +47,23 @@
     width: 300px;
     padding: 0 10px;
   }
+  div > div {
+    display: block;
+    border: none;
+    width: auto;
+    height: auto;
+    padding: 0;
+    flex: 1;
+    overflow-y: scroll;
+  }
 </style>
 
 <div>
   <Users {users} />
-  <Messages {messages} />
+  <div bind:this={messagesContainer}>
+    {#each messages as message}
+      <Message {message} />
+    {/each}
+  </div>
   <Form onSubmit={submit} />
 </div>

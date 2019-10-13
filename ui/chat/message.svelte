@@ -1,13 +1,6 @@
 <script>
   import Text from "./text.svelte";
-  import { afterUpdate } from "svelte";
-
-  export let messages;
-  let div;
-
-  afterUpdate(() => {
-    div.scrollBy(0, 1e6);
-  });
+  export let message;
 
   function formatTime(timestamp) {
     const d = new Date(timestamp);
@@ -25,10 +18,6 @@
 </script>
 
 <style>
-  div {
-    flex: 1;
-    overflow-y: scroll;
-  }
   time {
     color: gray;
     margin-right: 4px;
@@ -36,12 +25,8 @@
   }
 </style>
 
-<div bind:this={div}>
-  {#each messages as message}
-    <p>
-      <time>{formatTime(message.timestamp)}</time>
-      {message.author}:
-      <Text {message} />
-    </p>
-  {/each}
-</div>
+<p>
+  <time>{formatTime(message.timestamp)}</time>
+  {message.author}:
+  <Text {message} />
+</p>
