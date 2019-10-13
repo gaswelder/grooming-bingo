@@ -1,27 +1,14 @@
 <script>
   import { onMount } from "svelte";
+  import Menu from "./menu.svelte";
   export let ticket, onAdd, onRemove;
-
-  const specifications = [
-    "it's very easy",
-    "пропозаль",
-    "папап",
-    "I'm not sure",
-    "it's a different card",
-    "there's a card for that",
-    "copypest",
-    "exactly",
-    "I have to look at the code",
-    "makes sense",
-    "does not make sense"
-  ];
 
   function renderChecks(count) {
     if (!count) {
       return "";
     }
     let s = "";
-    const n = Math.ceil(count / 2);
+    const n = Math.ceil((count - 1) / 2);
     for (let i = 0; i < n; i++) {
       s += "+";
     }
@@ -36,10 +23,6 @@
     min-width: 200px;
     line-height: 26px;
     color: gray;
-  }
-  .advice-row.active {
-    color: black;
-    font-weight: bolder;
   }
   .advice-row button {
     visibility: hidden;
@@ -75,8 +58,8 @@
 <div class="notes">
   <div class="notes">
     <h4>Implementation notes</h4>
-    {#each specifications as advice}
-      <div class="advice-row" class:active={ticket.advices[advice]}>
+    {#each Object.keys(ticket.advices) as advice}
+      <div class="advice-row">
         {advice} {renderChecks(ticket.advices[advice])}
         <button on:click={() => onRemove(advice)} name="remove-advice">
           &minus;
@@ -84,5 +67,6 @@
         <button on:click={() => onAdd(advice)} name="add-advice">+</button>
       </div>
     {/each}
+    <Menu onSelect={onAdd} selected={Object.keys(ticket.advices)} />
   </div>
 </div>
