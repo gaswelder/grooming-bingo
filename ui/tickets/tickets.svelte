@@ -63,11 +63,6 @@
   .ticket button[name="delete"]:hover {
     background: rgba(9, 30, 66, 0.08);
   }
-  .ticket h3 {
-    color: #172b4d;
-    margin: 8px 0;
-    line-height: 20px;
-  }
 </style>
 
 {#each tickets as ticket}
@@ -78,13 +73,11 @@
         &times;
       </button>
     </h3>
-    <div>
-      <TechnicalDetails
-        {ticket}
-        onAdd={advice => grooming.addAdvice(ticket.id, advice)}
-        onRemove={advice => grooming.removeAdvice(ticket.id, advice)} />
-      <Votes {ticket} onVote={score => toggleVote(ticket, score)} />
-    </div>
+    <Votes {ticket} onVote={score => toggleVote(ticket, score)} />
+    <TechnicalDetails
+      {ticket}
+      onAdd={advice => grooming.addAdvice(ticket.id, advice)}
+      onRemove={advice => grooming.removeAdvice(ticket.id, advice)} />
   </div>
 {/each}
 <form on:submit={addTicket}>

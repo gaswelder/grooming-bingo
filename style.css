@@ -18,16 +18,13 @@ body {
   overflow-y: scroll;
   flex: 1;
 }
-.ticket > div {
-  display: flex;
+h3,
+h4 {
+  color: #172b4d;
+  margin: 8px 0;
+  line-height: 20px;
 }
-.ticket .votes {
-  min-width: 160px;
-}
-.ticket .notes {
-  padding-right: 8px;
-}
-.ticket h4 {
+h4 {
   margin-top: 1em;
   margin-bottom: 8px;
 }
