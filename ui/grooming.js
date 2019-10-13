@@ -56,8 +56,13 @@ export class Grooming {
     });
   }
 
-  _msg_change(val) {
-    console.log("change", val);
+  _msg_change(command) {
+    console.log("change", command);
+    const [op, path, val] = command;
+    if (op == "push" && path.toString() == "chat") {
+      this.state.chat.push(val);
+      this.chatListeners.forEach(fn => fn(val));
+    }
   }
 
   _msg_users(users) {
@@ -72,11 +77,6 @@ export class Grooming {
     this.state = data;
     this.loadListeners.forEach(fn => fn(data));
     this.state.chat.forEach(msg => this.chatListeners.forEach(fn => fn(msg)));
-  }
-
-  _msg_chat(msg) {
-    this.state.chat.push(msg);
-    this.chatListeners.forEach(fn => fn(msg));
   }
 
   _send(type, val) {
