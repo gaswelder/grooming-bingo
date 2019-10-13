@@ -36,7 +36,7 @@ export class Grooming {
           this.state1.apply(val);
           this.changeListeners.forEach(listener => {
             if (matchesFilter(val, listener.filter)) {
-              listener.f(this.state1.state);
+              listener.f(this.state1.state, val);
             }
           });
           break;
@@ -63,7 +63,12 @@ export class Grooming {
     this.loadListeners.push(func);
   }
   onChatMessage(func) {
-    // this.chatListeners.push(func);
+    this.onChange(
+      function(state, val) {
+        func(val[2]);
+      },
+      [["chat"]]
+    );
   }
 
   send(type, val) {
