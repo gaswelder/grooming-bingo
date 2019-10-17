@@ -103,13 +103,16 @@ exports.Grooming = class Grooming extends State {
   }
 
   startTyping(name) {
-    if (this.state.typing.findIndex(n => n === name) < 0) {
+    if (!this.state.typing.includes(name)) {
       this.push(["typing"], name);
     }
   }
 
   stopTyping(name) {
     const pos = this.state.typing.indexOf(name);
+    if (pos < 0) {
+      return;
+    }
     this.del(["typing", pos]);
   }
 };
