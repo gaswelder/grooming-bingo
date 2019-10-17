@@ -36,7 +36,7 @@
   grooming.onLoad(state => {
     users = state.users;
     messages = state.chat;
-    typing = state.typing.filter(u => u !== name);
+    typing = state.typing.filter(u => u !== grooming.username);
   });
 
   afterUpdate(() => {
