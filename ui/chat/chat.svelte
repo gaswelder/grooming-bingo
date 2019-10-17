@@ -34,8 +34,8 @@
   );
 
   grooming.onChange(
-    (state, val, name) => {
-      typing = state.typing.filter(u => u !== name);
+    (state, val) => {
+      typing = state.typing.filter(u => u !== grooming.username);
     },
     [["typing"]]
   );

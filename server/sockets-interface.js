@@ -96,13 +96,11 @@ module.exports = function socketsInterface(wss) {
         const { title } = val;
         grooming.createTicket(title);
       },
-      startTyping(val) {
-        const { name } = val;
-        grooming.startTyping(name);
+      startTyping() {
+        grooming.startTyping(user);
       },
-      stopTyping(val) {
-        const { name } = val;
-        grooming.stopTyping(name);
+      stopTyping() {
+        grooming.stopTyping(user);
       }
     };
     ws.on("message", function incoming(message) {
