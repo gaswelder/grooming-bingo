@@ -93,4 +93,10 @@ export class Grooming {
   deleteTicket(ticketId) {
     this.send("deleteTicket", { ticketId });
   }
+  startTyping() {
+    this.send("startTyping");
+  }
+  stopTyping() {
+    this.send("stopTyping");
+  }
 }

@@ -1,6 +1,7 @@
 <script>
   import Form from "./form.svelte";
   import Message from "./message.svelte";
+  import Typing from "./typing.svelte";
   import Users from "../users.svelte";
   import { afterUpdate } from "svelte";
 
@@ -9,6 +10,7 @@
   let users = [];
   let messages = [];
   let messagesContainer;
+  let typing = []
 
   grooming.onChange(
     state => {
@@ -24,9 +26,17 @@
     [["users"]]
   );
 
+  grooming.onChange(
+    (state, val) => {
+      typing = state.typing.filter(u => u !== grooming.username);
+    },
+    [["typing"]]
+  );
+
   grooming.onLoad(state => {
     users = state.users;
     messages = state.chat;
+    typing = state.typing.filter(u => u !== grooming.username);
   });
 
   afterUpdate(() => {
@@ -36,9 +46,16 @@
   function submit(text) {
     grooming.sendChatMessage(text);
   }
+  function startTyping() {
+    grooming.startTyping()
+  }
+  function stopTyping() {
+    grooming.stopTyping()
+  }
 </script>
 
 <style>
+  
   div {
     display: flex;
     flex-direction: column;
@@ -53,9 +70,10 @@
     width: auto;
     height: auto;
     padding: 0;
-    flex: 1;
     overflow-y: scroll;
+    flex: 1;
   }
+  
 </style>
 
 <div>
@@ -65,5 +83,6 @@
       <Message {message} />
     {/each}
   </div>
-  <Form onSubmit={submit} />
+  <Typing typing={typing} />
+  <Form onSubmit={submit} startTyping={startTyping} stopTyping={stopTyping} />
 </div>

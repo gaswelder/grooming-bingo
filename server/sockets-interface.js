@@ -56,6 +56,7 @@ module.exports = function socketsInterface(wss) {
 
     ws.on("close", function() {
       grooming.removeUser(user);
+      grooming.stopTyping(user);
     });
 
     const handlers = {
@@ -95,6 +96,12 @@ module.exports = function socketsInterface(wss) {
       createTicket(val) {
         const { title } = val;
         grooming.createTicket(title);
+      },
+      startTyping() {
+        grooming.startTyping(user);
+      },
+      stopTyping() {
+        grooming.stopTyping(user);
       }
     };
     ws.on("message", function incoming(message) {
