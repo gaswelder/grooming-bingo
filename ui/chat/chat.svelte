@@ -1,23 +1,16 @@
 <script>
   import Form from "./form.svelte";
   import Message from "./message.svelte";
+  import Typing from "./typing.svelte";
   import Users from "../users.svelte";
-  import { afterUpdate, onMount } from "svelte";
+  import { afterUpdate } from "svelte";
 
   export let grooming;
 
   let users = [];
   let messages = [];
-  let typing = [];
   let messagesContainer;
-  let string;
-  let interval;
-
-  onMount(() => {
-		return () => {
-      if (interval) clearInterval(interval);
-    };
-	});
+  let typing = []
 
   grooming.onChange(
     state => {
@@ -54,15 +47,10 @@
     grooming.sendChatMessage(text);
   }
   function startTyping() {
-    if (interval) clearInterval(interval);
     grooming.startTyping()
-    interval = setInterval(() => {
-			grooming.stopTyping()
-		}, 3000);
   }
   function stopTyping() {
     grooming.stopTyping()
-    if (interval) clearInterval(interval);
   }
 </script>
 
@@ -83,30 +71,18 @@
     height: auto;
     padding: 0;
     overflow-y: scroll;
-  }
-
-  .messages {
     flex: 1;
-  }
-
-  .typing {
-    font-style: italic;
-    position:relative;
   }
   
 </style>
 
 <div>
   <Users {users} />
-  <div class="messages" bind:this={messagesContainer}>
+  <div bind:this={messagesContainer}>
     {#each messages as message}
       <Message {message} />
     {/each}
   </div>
-  <div class="typing">
-    {#each typing as type}
-      <p>@{type} is typing...</p>
-    {/each}
-  </div>
+  <Typing typing={typing} />
   <Form onSubmit={submit} startTyping={startTyping} stopTyping={stopTyping} />
 </div>
