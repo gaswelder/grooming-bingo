@@ -36,7 +36,7 @@ export class Grooming {
           this.state1.apply(val);
           this.changeListeners.forEach(listener => {
             if (matchesFilter(val, listener.filter)) {
-              listener.f(this.state1.state, val);
+              listener.f(this.state1.state, val, this.username);
             }
           });
           break;
@@ -92,5 +92,11 @@ export class Grooming {
   }
   deleteTicket(ticketId) {
     this.send("deleteTicket", { ticketId });
+  }
+  startTyping() {
+    this.send("startTyping", { name: this.username });
+  }
+  stopTyping() {
+    this.send("stopTyping", { name: this.username });
   }
 }

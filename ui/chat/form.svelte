@@ -1,5 +1,7 @@
 <script>
   export let onSubmit;
+  export let startTyping;
+  export let stopTyping;
 
   let textarea;
 
@@ -8,11 +10,17 @@
     send();
   }
 
+  function stop() {
+    stopTyping()
+  }
+
   function keypress(event) {
     if (event.key != "Enter" || event.ctrlKey) {
+      startTyping()
       return;
     }
     event.preventDefault();
+    stop()
     send();
   }
 
@@ -76,6 +84,6 @@
 </style>
 
 <form on:submit={submit}>
-  <textarea on:keypress={keypress} bind:this={textarea} on:paste={onPaste} />
+  <textarea on:keypress={keypress} bind:this={textarea} on:paste={onPaste} on:blur={stop} />
   <button type="submit">Send (enter)</button>
 </form>

@@ -95,6 +95,14 @@ module.exports = function socketsInterface(wss) {
       createTicket(val) {
         const { title } = val;
         grooming.createTicket(title);
+      },
+      startTyping(val) {
+        const { name } = val;
+        grooming.startTyping(name);
+      },
+      stopTyping(val) {
+        const { name } = val;
+        grooming.stopTyping(name);
       }
     };
     ws.on("message", function incoming(message) {

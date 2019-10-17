@@ -5,7 +5,8 @@ exports.Grooming = class Grooming extends State {
     super({
       tickets: [],
       chat: [],
-      users: []
+      users: [],
+      typing: []
     });
     this.createTicket("Пропозаль");
   }
@@ -99,5 +100,16 @@ exports.Grooming = class Grooming extends State {
       advices: {},
       votes: []
     });
+  }
+
+  startTyping(name) {
+    if (this.state.typing.findIndex(n => n === name) < 0) {
+      this.push(["typing"], name);
+    }
+  }
+
+  stopTyping(name) {
+    const pos = this.state.typing.indexOf(name);
+    this.del(["typing", pos]);
   }
 };
