@@ -1,8 +1,5 @@
 <script>
-  import Text from "./text.svelte";
   export let typing;
-
-
 </script>
 
 <style>
@@ -13,7 +10,6 @@
     max-height: 100px;
     background-color: "red";
   }
-  
 </style>
 
 <div >
