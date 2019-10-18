@@ -72,7 +72,15 @@
   }
 </style>
 
-<button on:click={() => (open = !open)}>...</button>
+<svelte:body
+	on:click={() => {
+    if (open) {
+      open = false
+    }
+  }}
+/>
+
+<button on:click|stopPropagation={() => (open = !open)}>...</button>
 {#if open}
   <Popover>
     <ul>
