@@ -6,6 +6,7 @@
   import { afterUpdate } from "svelte";
 
   export let grooming;
+  let audio;
 
   let users = [];
   let messages = [];
@@ -15,6 +16,9 @@
   grooming.onChange(
     state => {
       messages = state.chat;
+      if (state.chat[state.chat.length-1].author !== grooming.username) {
+        audio.play();
+      }
     },
     [["chat"]]
   );
@@ -75,6 +79,8 @@
   }
   
 </style>
+
+<audio bind:this={audio} src="http://codeskulptor-demos.commondatastorage.googleapis.com/pang/pop.mp3"></audio>
 
 <div>
   <Users {users} />
