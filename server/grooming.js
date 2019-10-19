@@ -39,10 +39,11 @@ exports.Grooming = class Grooming extends State {
     if (pos < 0) {
       return false;
     }
-    const newVal = Math.max(
-      (this.state.tickets[pos].advices[advice] || 0) - 1,
-      0
-    );
+    const newVal = (this.state.tickets[pos].advices[advice] || 0) - 1;
+    if (newVal <= 0) {
+      this.del(["tickets", pos, "advices", advice]);
+      return true;
+    }
     this.set(["tickets", pos, "advices", advice], newVal);
     return true;
   }
