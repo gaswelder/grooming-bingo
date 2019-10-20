@@ -73,14 +73,15 @@
 </style>
 
 <svelte:body
-	on:click={() => {
-    if (open) {
+	on:click={(e) => {
+    if (e.target.closest("#menu-wrapper") === null && open) {
       open = false
     }
   }}
 />
 
 <button on:click|stopPropagation={() => (open = !open)}>...</button>
+<div id="menu-wrapper" >
 {#if open}
   <Popover>
     <ul>
@@ -97,3 +98,4 @@
     <input on:keypress={customInputKeypress} />
   </Popover>
 {/if}
+</div>
