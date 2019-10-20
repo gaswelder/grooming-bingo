@@ -6,29 +6,15 @@
   import { afterUpdate, onMount } from "svelte";
 
   export let grooming;
-  let audio;
-  let audioLoaded;
 
   let users = [];
   let messages = [];
   let messagesContainer;
-  let typing = []
-
-	onMount(() => {
-    audio.onerror = function() {
-      audioLoaded = false;
-    };
-    audio.oncanplay = function() {
-      audioLoaded = true;
-    };
-	});
+  let typing = [];
 
   grooming.onChange(
     state => {
       messages = state.chat;
-      if (audioLoaded && state.chat.length > 0 && state.chat[state.chat.length - 1].author !== grooming.username) {
-        audio.play();
-      }
     },
     [["chat"]]
   );
@@ -61,15 +47,14 @@
     grooming.sendChatMessage(text);
   }
   function startTyping() {
-    grooming.startTyping()
+    grooming.startTyping();
   }
   function stopTyping() {
-    grooming.stopTyping()
+    grooming.stopTyping();
   }
 </script>
 
 <style>
-  
   div {
     display: flex;
     flex-direction: column;
@@ -87,10 +72,7 @@
     overflow-y: scroll;
     flex: 1;
   }
-  
 </style>
-
-<audio bind:this={audio} src="http://codeskulptor-demos.commondatastorage.googleapis.com/pang/pop.mp3"></audio>
 
 <div>
   <Users {users} />
@@ -99,6 +81,6 @@
       <Message {message} />
     {/each}
   </div>
-  <Typing typing={typing} />
-  <Form onSubmit={submit} startTyping={startTyping} stopTyping={stopTyping} />
+  <Typing {typing} />
+  <Form onSubmit={submit} {startTyping} {stopTyping} />
 </div>

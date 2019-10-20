@@ -1,9 +1,9 @@
 import { Grooming } from "./grooming";
 import UI from "./ui.svelte";
 
-// const ding = new Audio(
-//   "https://notificationsounds.com/soundfiles/1bb91f73e9d31ea2830a5e73ce3ed328/file-sounds-1091-graceful.mp3"
-// );
+const ding = new Audio(
+  "http://codeskulptor-demos.commondatastorage.googleapis.com/pang/pop.mp3"
+);
 
 window.initGrooming = function(root) {
   let username = localStorage.getItem("username");
@@ -18,6 +18,9 @@ window.initGrooming = function(root) {
 
   Notification.requestPermission();
   grooming.onChatMessage(message => {
+    if (message.author != grooming.username) {
+      ding.play();
+    }
     if (document.hidden && Notification.permission == "granted") {
       new Notification(`${message.author}: ${message.text}`);
     }
