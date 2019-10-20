@@ -64,6 +64,9 @@ module.exports = function socketsInterface(wss) {
       },
       auth(val) {
         user = val;
+        send("settings", {
+          specials: ["@here", "@ashkan", "@kek", "@topkek"]
+        });
         send("init", grooming.state);
         auth(ws, user);
         grooming.addUser(user);

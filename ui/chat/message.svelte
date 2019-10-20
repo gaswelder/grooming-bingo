@@ -1,6 +1,7 @@
 <script>
   import Text from "./text.svelte";
   export let message;
+  export let specials;
 
   function formatTime(timestamp) {
     const d = new Date(timestamp);
@@ -28,5 +29,5 @@
 <p>
   <time>{formatTime(message.timestamp)}</time>
   {message.author}:
-  <Text {message} />
+  <Text {specials} {message} />
 </p>

@@ -69,7 +69,7 @@
   <Users {users} />
   <div bind:this={messagesContainer}>
     {#each messages as message}
-      <Message {message} />
+      <Message specials={grooming.specialMessages} {message} />
     {/each}
   </div>
   <Typing {users} currentUser={grooming.username} />

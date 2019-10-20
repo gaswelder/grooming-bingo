@@ -18,6 +18,7 @@ export class Grooming {
     this.loadListeners = [];
     this.changeListeners = [];
     this.state1 = new State({});
+    this.specialMessages = null;
 
     const url = location.host.includes("localhost")
       ? `ws://${location.host}/grooming`
@@ -27,6 +28,9 @@ export class Grooming {
     this.socket.onMessage(message => {
       const { type, val } = JSON.parse(message.data);
       switch (type) {
+        case "settings":
+          this.specialMessages = val.specials;
+          break;
         case "init":
           this.state1 = new State(val);
           this.state = val;

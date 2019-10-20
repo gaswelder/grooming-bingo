@@ -1,8 +1,7 @@
 <script>
   import { withLinks } from "../lib/with-links";
   export let message;
-
-  const specials = ["@here", "@ashkan", "@kek", "@topkek"];
+  export let specials = ["@here"];
 
   function process(text) {
     const buffer = document.createElement("div");
