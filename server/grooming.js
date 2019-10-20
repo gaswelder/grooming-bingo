@@ -78,46 +78,27 @@ exports.Grooming = class Grooming {
   }
 
   toggleVote(user, ticketId, score) {
-    const ticketPos = this.state.tickets.findIndex(t => t.id == ticketId);
-    if (ticketPos < 0) {
-      return false;
-    }
-    const ticket = this.state.tickets[ticketPos];
-    const votePos = ticket.votes.findIndex(
-      v => v.author == user && v.score == score
-    );
-    // If this is an existing vote, just remove it.
-    if (votePos >= 0) {
-      this.change(state => {
-        state.tickets[ticketPos].votes.splice(votePos, 1);
-      });
-      return true;
-    }
-
-    // If the user is adding another vote, make sure the result
-    // is not more than two votes.
-    // Keep only one old vote that is closest to the new vote
-    const existingScores = ticket.votes
-      .filter(vote => vote.author == user)
-      .map(vote => vote.score)
-      .sort((a, b) => Math.abs(b - score) - Math.abs(a - score));
-    const remove = s => {
-      const newVotes = ticket.votes.filter(
-        v => v.author == user && v.score == s
-      );
-      this.change(state => {
-        state.tickets[ticketPos].votes = newVotes;
-      });
-    };
-    existingScores.slice(1).forEach(remove);
-
     this.change(state => {
-      state.tickets[ticketPos].votes.push({
-        author: user,
-        score
-      });
+      const ticket = state.tickets.find(t => t.id == ticketId);
+      if (!ticket) {
+        return;
+      }
+      const pos = ticket.votes.findIndex(
+        v => v.author == user && v.score == score
+      );
+      // If this is the same vote, remove it (withdraw vote).
+      // Otherwise set the new vote.
+      if (pos >= 0) {
+        ticket.votes.splice(pos, 1);
+      } else {
+        ticket.votes = ticket.votes
+          .filter(v => v.author != user)
+          .concat({
+            author: user,
+            score
+          });
+      }
     });
-    return true;
   }
 
   deleteTicket(ticketId) {
