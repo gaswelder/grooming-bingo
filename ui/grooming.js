@@ -1,23 +1,12 @@
-import State from "../lib/state";
 import { PersistentSocket } from "../lib/persistent-socket";
-
-function matchesFilter(change, filter = []) {
-  const [path, op] = filter;
-  if (op && op != change[0]) {
-    return false;
-  }
-  if (path && !change[1].join(",").startsWith(path.join(","))) {
-    return false;
-  }
-  return true;
-}
+import { applyPatches } from "immer";
 
 export class Grooming {
   constructor(username) {
     this.username = username;
     this.loadListeners = [];
     this.changeListeners = [];
-    this.state1 = new State({});
+    this.state = undefined;
     this.specialMessages = null;
 
     const url = location.host.includes("localhost")
@@ -32,23 +21,20 @@ export class Grooming {
           this.specialMessages = val.specials;
           break;
         case "init":
-          this.state1 = new State(val);
           this.state = val;
           this.loadListeners.forEach(fn => fn(val));
           break;
-        case "change":
-          this.state1.apply(val);
+        case "changes":
+          this.state = applyPatches(this.state, val);
           this.changeListeners.forEach(listener => {
-            if (matchesFilter(val, listener.filter)) {
-              listener.f(this.state1.state, val);
-            }
+            listener.f(this.state, val);
           });
           break;
         case "ohce":
           console.info("RTT time", Date.now() - val, "ms");
           break;
         default:
-          console.warning("Unhandled message", type, val);
+          console.warn("Unhandled message", type, val);
       }
     });
 
@@ -69,7 +55,10 @@ export class Grooming {
   onChatMessage(func) {
     this.onChange(
       function(state, val) {
-        func(val[2]);
+        const messages = val
+          .filter(change => change.op == "add" && change.path[0] == "chat")
+          .map(change => change.value);
+        messages.forEach(m => func(m));
       },
       [["chat"]]
     );

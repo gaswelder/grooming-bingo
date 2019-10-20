@@ -1,62 +1,80 @@
-const State = require("../lib/state");
+const immer = require("immer");
 
 const defaultOptions = {
   specialMessages: ["@here"]
 };
 
-exports.Grooming = class Grooming extends State {
+exports.Grooming = class Grooming {
   constructor(options = {}) {
-    super({
+    this.state = {
       tickets: [],
       chat: [],
       users: []
-    });
+    };
     this.options = Object.assign({}, defaultOptions, options);
+    this.changeListeners = [];
     this.createTicket("Пропозаль");
   }
 
+  onChange(f) {
+    this.changeListeners.push(f);
+  }
+
+  change(changer) {
+    this.state = immer.produce(this.state, changer, changes => {
+      this.changeListeners.forEach(f => f(changes));
+    });
+  }
+
   addUser(username) {
-    this.push(["users"], {
-      name: username,
-      typing: false
+    this.change(state => {
+      state.users.push({
+        name: username,
+        typing: false
+      });
     });
   }
 
   removeUser(username) {
-    const pos = this.state.users.findIndex(u => u.name == username);
-    this.del(["users", pos]);
+    this.change(state => {
+      state.users = state.users.filter(u => u.name != username);
+    });
   }
 
   chat(author, text) {
-    this.push(["chat"], {
-      author,
-      text,
-      timestamp: Date.now()
+    this.change(state => {
+      state.chat.push({
+        author,
+        text,
+        timestamp: Date.now()
+      });
     });
   }
 
   addAdvice(ticketId, advice) {
     const pos = this.state.tickets.findIndex(t => t.id == ticketId);
     if (pos < 0) {
-      return false;
+      return;
     }
-    const newVal = (this.state.tickets[pos].advices[advice] || 0) + 1;
-    this.set(["tickets", pos, "advices", advice], newVal);
-    return true;
+    this.change(state => {
+      state.tickets[pos].advices[advice] =
+        (state.tickets[pos].advices[advice] || 0) + 1;
+    });
   }
 
   removeAdvice(ticketId, advice) {
     const pos = this.state.tickets.findIndex(t => t.id == ticketId);
     if (pos < 0) {
-      return false;
+      return;
     }
     const newVal = (this.state.tickets[pos].advices[advice] || 0) - 1;
-    if (newVal <= 0) {
-      this.del(["tickets", pos, "advices", advice]);
-      return true;
-    }
-    this.set(["tickets", pos, "advices", advice], newVal);
-    return true;
+    this.change(state => {
+      if (newVal <= 0) {
+        delete state.tickets[pos].advices[advice];
+      } else {
+        state.tickets[pos].advices[advice] = newVal;
+      }
+    });
   }
 
   toggleVote(user, ticketId, score) {
@@ -70,7 +88,9 @@ exports.Grooming = class Grooming extends State {
     );
     // If this is an existing vote, just remove it.
     if (votePos >= 0) {
-      this.del(["tickets", ticketPos, "votes", votePos]);
+      this.change(state => {
+        state.tickets[ticketPos].votes.splice(votePos, 1);
+      });
       return true;
     }
 
@@ -85,13 +105,17 @@ exports.Grooming = class Grooming extends State {
       const newVotes = ticket.votes.filter(
         v => v.author == user && v.score == s
       );
-      this.set(["tickets", ticketPos, "votes"], newVotes);
+      this.change(state => {
+        state.tickets[ticketPos].votes = newVotes;
+      });
     };
     existingScores.slice(1).forEach(remove);
 
-    this.push(["tickets", ticketPos, "votes"], {
-      author: user,
-      score
+    this.change(state => {
+      state.tickets[ticketPos].votes.push({
+        author: user,
+        score
+      });
     });
     return true;
   }
@@ -101,16 +125,20 @@ exports.Grooming = class Grooming extends State {
     if (pos < 0) {
       return false;
     }
-    this.del(["tickets", pos]);
+    this.change(state => {
+      state.tickets.splice(pos, 1);
+    });
     return true;
   }
 
   createTicket(title) {
-    this.push(["tickets"], {
-      id: Date.now(),
-      title,
-      advices: {},
-      votes: []
+    this.change(state => {
+      state.tickets.push({
+        id: Date.now(),
+        title,
+        advices: {},
+        votes: []
+      });
     });
   }
 
@@ -119,7 +147,9 @@ exports.Grooming = class Grooming extends State {
     if (pos < 0) {
       return;
     }
-    this.set(["users", pos, "typing"], true);
+    this.change(state => {
+      state.users[pos].typing = true;
+    });
   }
 
   stopTyping(name) {
@@ -127,6 +157,8 @@ exports.Grooming = class Grooming extends State {
     if (pos < 0) {
       return;
     }
-    this.set(["users", pos, "typing"], false);
+    this.change(state => {
+      state.users[pos].typing = false;
+    });
   }
 };
