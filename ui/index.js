@@ -2,7 +2,7 @@ import { Grooming } from "./grooming";
 import UI from "./ui.svelte";
 
 const ding = new Audio(
-  "http://codeskulptor-demos.commondatastorage.googleapis.com/pang/pop.mp3"
+  "https://codeskulptor-demos.commondatastorage.googleapis.com/pang/pop.mp3"
 );
 
 window.initGrooming = function(root) {
