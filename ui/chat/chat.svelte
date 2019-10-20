@@ -3,18 +3,32 @@
   import Message from "./message.svelte";
   import Typing from "./typing.svelte";
   import Users from "../users.svelte";
-  import { afterUpdate } from "svelte";
+  import { afterUpdate, onMount } from "svelte";
 
   export let grooming;
+  let audio;
+  let audioLoaded;
 
   let users = [];
   let messages = [];
   let messagesContainer;
   let typing = []
 
+	onMount(() => {
+    audio.onerror = function() {
+      audioLoaded = false;
+    };
+    audio.oncanplay = function() {
+      audioLoaded = true;
+    };
+	});
+
   grooming.onChange(
     state => {
       messages = state.chat;
+      if (audioLoaded && state.chat.length > 0 && state.chat[state.chat.length - 1].author !== grooming.username) {
+        audio.play();
+      }
     },
     [["chat"]]
   );
@@ -75,6 +89,8 @@
   }
   
 </style>
+
+<audio bind:this={audio} src="http://codeskulptor-demos.commondatastorage.googleapis.com/pang/pop.mp3"></audio>
 
 <div>
   <Users {users} />
