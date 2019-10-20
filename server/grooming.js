@@ -11,12 +11,14 @@ exports.Grooming = class Grooming extends State {
     this.createTicket("Пропозаль");
   }
 
-  addUser(user) {
-    this.push(["users"], user);
+  addUser(username) {
+    this.push(["users"], {
+      name: username
+    });
   }
 
-  removeUser(user) {
-    const pos = this.state.users.indexOf(user);
+  removeUser(username) {
+    const pos = this.state.users.findIndex(u => u.name == username);
     this.del(["users", pos]);
   }
 

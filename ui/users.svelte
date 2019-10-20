@@ -17,6 +17,6 @@
 
 <div>
   {#each users as user}
-    <span>{user}</span>
+    <span>{user.name}</span>
   {/each}
 </div>
