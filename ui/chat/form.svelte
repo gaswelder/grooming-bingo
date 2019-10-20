@@ -7,33 +7,46 @@
 
   let textarea;
   let interval;
+  let typing = false;
 
   onMount(() => {
-		return () => {
-      if (interval) clearInterval(interval);
-    };
-	});
+    return stop;
+  });
 
   function submit(event) {
     event.preventDefault();
     send();
   }
 
-  function stop() {
-    stopTyping()
+  function onBlur() {
+    stopTyping();
   }
 
-  function keypress(event) {
-    if (event.key != "Enter" || event.ctrlKey) {
-      if (interval) clearInterval(interval);
-      startTyping()
-      interval = setInterval(() => stop(), 3000);
-      return;
+  function start() {
+    if (!typing) {
+      typing = true;
+      startTyping();
     }
-    event.preventDefault();
-    stop();
-    if (interval) clearInterval(interval);
-    send();
+    clearTimeout(interval);
+    interval = setTimeout(stop, 3000);
+  }
+
+  function stop() {
+    if (typing) {
+      typing = false;
+      stopTyping();
+    }
+  }
+
+  function onKeyPress(event) {
+    // Send when Enter is pressed.
+    if (event.key == "Enter" && !event.ctrlKey) {
+      event.preventDefault();
+      send();
+      stop();
+    }
+
+    start();
   }
 
   function send() {
@@ -96,6 +109,10 @@
 </style>
 
 <form on:submit={submit}>
-  <textarea on:keypress={keypress} bind:this={textarea} on:paste={onPaste} on:blur={stop} />
+  <textarea
+    bind:this={textarea}
+    on:paste={onPaste}
+    on:keypress={onKeyPress}
+    on:blur={onBlur} />
   <button type="submit">Send (enter)</button>
 </form>

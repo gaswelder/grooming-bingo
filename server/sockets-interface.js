@@ -101,7 +101,7 @@ module.exports = function socketsInterface(wss) {
     };
     ws.on("message", function incoming(message) {
       const msg = JSON.parse(message);
-      console.log(msg);
+      console.log(user, "\t", msg);
       handlers[msg.type](msg.val);
     });
   }
