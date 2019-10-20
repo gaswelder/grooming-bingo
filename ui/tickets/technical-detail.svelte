@@ -1,7 +1,8 @@
 <script>
-  import { onMount } from "svelte";
-  import Menu from "./menu.svelte";
-  export let ticket, onAdd, onRemove;
+  import { createEventDispatcher } from "svelte";
+  export let text, count;
+
+  const dispatch = createEventDispatcher();
 
   function renderChecks(count) {
     if (!count) {
@@ -17,12 +18,12 @@
 </script>
 
 <style>
-  .advice-row {
+  div {
     position: relative;
     padding-right: 60px;
     line-height: 26px;
   }
-  .advice-row button {
+  div button {
     visibility: hidden;
     position: absolute;
     background: transparent;
@@ -34,32 +35,29 @@
     border-radius: 3px;
     cursor: pointer;
   }
-  .advice-row:hover {
+  div:hover {
     background: rgba(9, 30, 66, 0.08);
   }
-  .advice-row:hover button {
+  div:hover button {
     visibility: visible;
   }
-  .advice-row button:hover {
+  button:hover {
     background: rgba(9, 30, 66, 0.08);
   }
-  .advice-row button[name="remove-advice"] {
+  button[name="remove-advice"] {
     top: 0;
     right: 28px;
   }
-  .advice-row button[name="add-advice"] {
+  button[name="add-advice"] {
     top: 0;
     right: 0;
   }
 </style>
 
-{#each Object.keys(ticket.advices) as advice}
-  <div class="advice-row">
-    {advice} {renderChecks(ticket.advices[advice])}
-    <button on:click={() => onRemove(advice)} name="remove-advice">
-      &minus;
-    </button>
-    <button on:click={() => onAdd(advice)} name="add-advice">+</button>
-  </div>
-{/each}
-<Menu onSelect={onAdd} selected={Object.keys(ticket.advices)} />
+<div>
+  {text} {renderChecks(count)}
+  <button on:click={() => dispatch('minus')} name="remove-advice">
+    &minus;
+  </button>
+  <button on:click={() => dispatch('plus')} name="add-advice">+</button>
+</div>

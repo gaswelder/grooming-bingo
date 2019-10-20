@@ -1,7 +1,8 @@
 <script>
   import { onMount } from "svelte";
   import Votes from "./votes.svelte";
-  import TechnicalDetails from "./technical-details.svelte";
+  import TechnicalDetail from "./technical-detail.svelte";
+  import Menu from "./menu.svelte";
 
   export let grooming;
 
@@ -76,10 +77,16 @@
     </h3>
 
     <h4>Technical details</h4>
-    <TechnicalDetails
-      {ticket}
-      onAdd={advice => grooming.addAdvice(ticket.id, advice)}
-      onRemove={advice => grooming.removeAdvice(ticket.id, advice)} />
+    {#each Object.keys(ticket.advices) as advice}
+      <TechnicalDetail
+        text={advice}
+        count={ticket.advices[advice]}
+        on:minus={() => grooming.removeAdvice(ticket.id, advice)}
+        on:plus={() => grooming.addAdvice(ticket.id, advice)} />
+    {/each}
+    <Menu
+      onSelect={advice => grooming.addAdvice(ticket.id, advice)}
+      selected={Object.keys(ticket.advices)} />
     <h4>Votes</h4>
     <Votes {ticket} onVote={score => toggleVote(ticket, score)} />
   </div>
