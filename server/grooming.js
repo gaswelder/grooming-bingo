@@ -5,15 +5,15 @@ exports.Grooming = class Grooming extends State {
     super({
       tickets: [],
       chat: [],
-      users: [],
-      typing: []
+      users: []
     });
     this.createTicket("Пропозаль");
   }
 
   addUser(username) {
     this.push(["users"], {
-      name: username
+      name: username,
+      typing: false
     });
   }
 
@@ -110,16 +110,18 @@ exports.Grooming = class Grooming extends State {
   }
 
   startTyping(name) {
-    if (!this.state.typing.includes(name)) {
-      this.push(["typing"], name);
-    }
-  }
-
-  stopTyping(name) {
-    const pos = this.state.typing.indexOf(name);
+    const pos = this.state.users.findIndex(u => u.name == name);
     if (pos < 0) {
       return;
     }
-    this.del(["typing", pos]);
+    this.set(["users", pos, "typing"], true);
+  }
+
+  stopTyping(name) {
+    const pos = this.state.users.findIndex(u => u.name == name);
+    if (pos < 0) {
+      return;
+    }
+    this.set(["users", pos, "typing"], false);
   }
 };

@@ -10,7 +10,6 @@
   let users = [];
   let messages = [];
   let messagesContainer;
-  let typing = [];
 
   grooming.onChange(
     state => {
@@ -26,17 +25,9 @@
     [["users"]]
   );
 
-  grooming.onChange(
-    (state, val) => {
-      typing = state.typing.filter(u => u !== grooming.username);
-    },
-    [["typing"]]
-  );
-
   grooming.onLoad(state => {
     users = state.users;
     messages = state.chat;
-    typing = state.typing.filter(u => u !== grooming.username);
   });
 
   afterUpdate(() => {
@@ -81,6 +72,6 @@
       <Message {message} />
     {/each}
   </div>
-  <Typing {typing} />
+  <Typing {users} currentUser={grooming.username} />
   <Form onSubmit={submit} {startTyping} {stopTyping} />
 </div>

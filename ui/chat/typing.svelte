@@ -1,5 +1,10 @@
 <script>
-  export let typing;
+  export let users;
+  export let currentUser;
+
+  $: typingUsers = users.filter(
+    user => user.typing && user.name != currentUser
+  );
 </script>
 
 <style>
@@ -12,8 +17,8 @@
   }
 </style>
 
-<div >
-    {#each typing as type}
-      <p>@{type} is typing...</p>
-    {/each}
+<div>
+  {#each typingUsers as user}
+    <p>@{user.name} is typing...</p>
+  {/each}
 </div>

@@ -56,7 +56,6 @@ module.exports = function socketsInterface(wss) {
 
     ws.on("close", function() {
       grooming.removeUser(user);
-      grooming.stopTyping(user);
     });
 
     const handlers = {
