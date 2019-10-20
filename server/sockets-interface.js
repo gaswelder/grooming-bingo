@@ -70,12 +70,7 @@ module.exports = function socketsInterface(wss) {
         grooming.addUser(user);
       },
       chat(val) {
-        const msg = {
-          author: user,
-          text: val,
-          timestamp: Date.now()
-        };
-        grooming.chat(msg);
+        grooming.chat(user, val);
       },
       addAdvice(val) {
         const { ticketId, advice } = val;

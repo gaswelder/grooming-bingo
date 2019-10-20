@@ -20,8 +20,12 @@ exports.Grooming = class Grooming extends State {
     this.del(["users", pos]);
   }
 
-  chat(msg) {
-    this.push(["chat"], msg);
+  chat(author, text) {
+    this.push(["chat"], {
+      author,
+      text,
+      timestamp: Date.now()
+    });
   }
 
   addAdvice(ticketId, advice) {
