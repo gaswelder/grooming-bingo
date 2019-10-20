@@ -1,12 +1,17 @@
 const State = require("../lib/state");
 
+const defaultOptions = {
+  specialMessages: ["@here"]
+};
+
 exports.Grooming = class Grooming extends State {
-  constructor() {
+  constructor(options = {}) {
     super({
       tickets: [],
       chat: [],
       users: []
     });
+    this.options = Object.assign({}, defaultOptions, options);
     this.createTicket("Пропозаль");
   }
 

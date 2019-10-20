@@ -1,11 +1,4 @@
-const { Grooming } = require("./grooming");
-
-module.exports = function socketsInterface(wss) {
-  /**
-   * A Grooming instance for the current session.
-   */
-  const grooming = new Grooming();
-
+module.exports = function socketsInterface(wss, grooming) {
   /**
    * The list of all connected sockets.
    */
@@ -65,7 +58,7 @@ module.exports = function socketsInterface(wss) {
       auth(val) {
         user = val;
         send("settings", {
-          specials: ["@here", "@ashkan", "@kek", "@topkek"]
+          specials: grooming.options.specialMessages
         });
         send("init", grooming.state);
         auth(ws, user);
