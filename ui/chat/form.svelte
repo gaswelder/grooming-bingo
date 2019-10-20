@@ -1,9 +1,7 @@
 <script>
-  import { onMount } from "svelte";
+  import { onMount, createEventDispatcher } from "svelte";
 
-  export let onSubmit;
-  export let startTyping;
-  export let stopTyping;
+  const dispatch = createEventDispatcher();
 
   let textarea;
   let interval;
@@ -19,13 +17,13 @@
   }
 
   function onBlur() {
-    stopTyping();
+    dispatch("typingstop");
   }
 
   function start() {
     if (!typing) {
       typing = true;
-      startTyping();
+      dispatch("typingstart");
     }
     clearTimeout(interval);
     interval = setTimeout(stop, 3000);
@@ -34,7 +32,7 @@
   function stop() {
     if (typing) {
       typing = false;
-      stopTyping();
+      dispatch("typingstop");
     }
   }
 
@@ -55,7 +53,7 @@
     if (s == "") {
       return;
     }
-    onSubmit(s);
+    dispatch("submit", s);
   }
 
   function toDataURL(file) {

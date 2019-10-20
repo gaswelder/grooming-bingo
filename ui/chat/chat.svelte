@@ -34,8 +34,8 @@
     messagesContainer.scrollBy(0, 1e6);
   });
 
-  function submit(text) {
-    grooming.sendChatMessage(text);
+  function submit(event) {
+    grooming.sendChatMessage(event.detail);
   }
   function startTyping() {
     grooming.startTyping();
@@ -73,5 +73,8 @@
     {/each}
   </div>
   <Typing {users} currentUser={grooming.username} />
-  <Form onSubmit={submit} {startTyping} {stopTyping} />
+  <Form
+    on:submit={submit}
+    on:typingstart={startTyping}
+    on:typingstop={stopTyping} />
 </div>
