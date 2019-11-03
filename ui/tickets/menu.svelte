@@ -18,7 +18,11 @@
     "I have to look at the code",
     "makes sense",
     "does not make sense",
-    "calculate"
+    "calculate",
+    "we don't care",
+    "it's very simple",
+    "I don't know",
+    "change that behavior"
   ];
 
   function customInputKeypress(event) {
@@ -73,29 +77,28 @@
 </style>
 
 <svelte:body
-	on:click={(e) => {
-    if (e.target.closest("#menu-wrapper") === null && open) {
-      open = false
+  on:click={e => {
+    if (e.target.closest('#menu-wrapper') === null && open) {
+      open = false;
     }
-  }}
-/>
+  }} />
 
 <button on:click|stopPropagation={() => (open = !open)}>...</button>
-<div id="menu-wrapper" >
-{#if open}
-  <Popover>
-    <ul>
-      {#each specifications.filter(s => !selected.includes(s)) as spec}
-        <li
-          on:click={() => {
-            onSelect(spec);
-            open = false;
-          }}>
-          {spec}
-        </li>
-      {/each}
-    </ul>
-    <input on:keypress={customInputKeypress} />
-  </Popover>
-{/if}
+<div id="menu-wrapper">
+  {#if open}
+    <Popover>
+      <ul>
+        {#each specifications.filter(s => !selected.includes(s)) as spec}
+          <li
+            on:click={() => {
+              onSelect(spec);
+              open = false;
+            }}>
+            {spec}
+          </li>
+        {/each}
+      </ul>
+      <input on:keypress={customInputKeypress} />
+    </Popover>
+  {/if}
 </div>
