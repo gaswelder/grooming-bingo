@@ -44,6 +44,7 @@
   ul {
     list-style-type: none;
     padding: 0;
+    margin-bottom: 8px;
   }
   li {
     color: #172b4d;
@@ -54,6 +55,9 @@
   }
   li:hover {
     background-color: rgba(9, 30, 66, 0.04);
+  }
+  input {
+    margin: 8px 12px;
   }
 </style>
 

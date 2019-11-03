@@ -18,7 +18,10 @@
 
   function addTicket(event) {
     event.preventDefault();
-    grooming.createTicket(newTicketName);
+    newTicketName = newTicketName.trim();
+    if (newTicketName != '') {
+      grooming.createTicket(newTicketName);
+    }
     newTicketName = "";
   }
 
@@ -44,6 +47,7 @@
     box-shadow: 0 1px 0 rgba(9, 30, 66, 0.25);
     margin-bottom: 8px;
     min-height: 20px;
+    min-width: 170px;
     position: relative;
     vertical-align: top;
   }
@@ -92,7 +96,7 @@
   </div>
 {/each}
 
-<form on:submit={addTicket}>
-  <input required bind:value={newTicketName} />
+<form on:submit={addTicket} class="ticket">
+  <input bind:value={newTicketName} />
   <button>Add ticket</button>
 </form>

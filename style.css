@@ -36,9 +36,22 @@ button {
   user-select: none;
   white-space: nowrap;
 }
-
 button:hover {
   background-color: rgba(9, 30, 66, 0.08);
   box-shadow: none;
   border: none;
+}
+
+input {
+  background: transparent;
+  border-radius: 3px;
+  border: 1px solid #c2cad9;
+  padding: 4px 8px;
+  color: #172b4d;
+  box-sizing: border-box;
+  line-height: 20px;
+  width: 200px;
+}
+input:focus {
+  border-color: #172b4d;
 }
