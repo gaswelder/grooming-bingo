@@ -18,10 +18,14 @@ window.initGrooming = function(root) {
 
   Notification.requestPermission();
   grooming.onChatMessage(message => {
-    if (message.author != grooming.username) {
+    if (message.author && message.author != grooming.username) {
       ding.play();
     }
-    if (document.hidden && Notification.permission == "granted") {
+    if (
+      message.author &&
+      document.hidden &&
+      Notification.permission == "granted"
+    ) {
       new Notification(`${message.author}: ${message.text}`);
     }
   });
