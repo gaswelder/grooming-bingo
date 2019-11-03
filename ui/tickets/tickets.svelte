@@ -19,7 +19,7 @@
   function addTicket(event) {
     event.preventDefault();
     newTicketName = newTicketName.trim();
-    if (newTicketName != '') {
+    if (newTicketName != "") {
       grooming.createTicket(newTicketName);
     }
     newTicketName = "";
@@ -40,7 +40,7 @@
 <style>
   .ticket {
     display: inline-block;
-    background: white;
+    background: rgba(255, 255, 255, 0.93);
     border-radius: 3px;
     padding: 1em;
     margin: 0.5em;
