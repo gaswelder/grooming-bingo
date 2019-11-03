@@ -39,26 +39,7 @@
 
 <style>
   button {
-    background-color: rgba(9, 30, 66, 0.04);
-    box-shadow: none;
-    border: none;
-    border-radius: 3px;
-    box-sizing: border-box;
-    cursor: pointer;
-    display: block;
-    height: 32px;
     margin-top: 8px;
-    max-width: 300px;
-    overflow: hidden;
-    padding: 6px 12px;
-    user-select: none;
-    white-space: nowrap;
-  }
-
-  button:hover {
-    background-color: rgba(9, 30, 66, 0.08);
-    box-shadow: none;
-    border: none;
   }
   ul {
     list-style-type: none;

@@ -18,6 +18,7 @@
     width: 32px;
     height: 32px;
     margin-bottom: 2px;
+    padding: 0;
   }
   [data-score="1"] {
     background-color: #d7f7fa;
