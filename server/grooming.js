@@ -53,6 +53,30 @@ exports.Grooming = class Grooming {
     });
   }
 
+  setMap(mapName) {
+    const maps = {
+      q3dm6:
+        "https://vignette.wikia.nocookie.net/quake/images/1/18/Q3DM6.jpg/revision/latest?cb=20150511122543",
+      q3dm13:
+        "https://vignette.wikia.nocookie.net/quake/images/5/52/Q3DM13.jpg/revision/latest?cb=20150518133645",
+      q3dm17:
+        "https://vignette.wikia.nocookie.net/quake3/images/c/c7/Dm17_fullshot.jpg/revision/latest?cb=20100214045500",
+      ztn3tourney1:
+        "https://lvlworld.com/levels/ztn3tourney1/ztn3tourney1lg.jpg",
+      cs_assault:
+        "https://vignette.wikia.nocookie.net/cswikia/images/0/00/Cs_assault_go.png/revision/latest?cb=20140819095651",
+      cs_italy:
+        "https://vignette.wikia.nocookie.net/cswikia/images/2/2c/Cs_italy_csgo.png/revision/latest?cb=20140819100829",
+      cs_office:
+        "https://vignette.wikia.nocookie.net/cswikia/images/f/f7/Csgo-cs-office.png/revision/latest?cb=20140820132335",
+      de_dust:
+        "https://vignette.wikia.nocookie.net/cswikia/images/6/6d/Csgo-de-dust.png/revision/latest?cb=20140820131343"
+    };
+    this.change(state => {
+      state.map = maps[mapName];
+    });
+  }
+
   _systemMessage(text) {
     setImmediate(() => this.chat(null, text));
   }

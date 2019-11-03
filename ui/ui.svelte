@@ -10,6 +10,11 @@
   grooming.onConnectionChange(function(newOnline) {
     online = newOnline;
   });
+
+  let background = "none";
+  grooming.onChange(state => {
+    background = state.map;
+  });
 </script>
 
 <style>
@@ -19,7 +24,9 @@
   }
 </style>
 
-<div class="ticketsRoot">
+<div
+  class="ticketsRoot"
+  style="background-image: url({background}); background-size: cover">
   <Tickets {grooming} />
 </div>
 <div>

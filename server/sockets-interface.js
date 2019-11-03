@@ -65,6 +65,13 @@ module.exports = function socketsInterface(wss, grooming) {
         grooming.addUser(user);
       },
       chat(val) {
+        if (val.startsWith("/map")) {
+          const map = val.split(/\s+/);
+          if (map.length == 2) {
+            grooming.setMap(map[1]);
+          }
+          return;
+        }
         grooming.chat(user, val);
       },
       addAdvice(val) {
