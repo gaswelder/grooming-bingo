@@ -62,6 +62,11 @@
     if (e.target.closest('#menu-wrapper') === null && open) {
       open = false;
     }
+  }}
+  on:keyup={e => {
+    if (e.key == 'Escape') {
+      open = false;
+    }
   }} />
 
 <button on:click|stopPropagation={() => (open = !open)}>...</button>
