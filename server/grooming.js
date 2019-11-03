@@ -32,12 +32,14 @@ exports.Grooming = class Grooming {
         name: username,
         typing: false
       });
+      this._systemMessage(`${username} connected`);
     });
   }
 
   removeUser(username) {
     this.change(state => {
       state.users = state.users.filter(u => u.name != username);
+      this._systemMessage(`${username} disconnected`);
     });
   }
 
@@ -51,7 +53,11 @@ exports.Grooming = class Grooming {
     });
   }
 
-  addAdvice(ticketId, advice) {
+  _systemMessage(text) {
+    setImmediate(() => this.chat(null, text));
+  }
+
+  addAdvice(ticketId, advice, user) {
     this.change(state => {
       const pos = state.tickets.findIndex(t => t.id == ticketId);
       if (pos < 0) {
@@ -59,10 +65,14 @@ exports.Grooming = class Grooming {
       }
       const current = state.tickets[pos].advices[advice] || 0;
       state.tickets[pos].advices[advice] = Math.min(current + 1, 6);
+
+      if (current == 0) {
+        this._systemMessage(user + " added advice " + advice);
+      }
     });
   }
 
-  removeAdvice(ticketId, advice) {
+  removeAdvice(ticketId, advice, user) {
     const pos = this.state.tickets.findIndex(t => t.id == ticketId);
     if (pos < 0) {
       return;
@@ -71,6 +81,7 @@ exports.Grooming = class Grooming {
     this.change(state => {
       if (newVal <= 0) {
         delete state.tickets[pos].advices[advice];
+        this._systemMessage(user + " removed advice " + advice);
       } else {
         state.tickets[pos].advices[advice] = newVal;
       }
@@ -89,8 +100,10 @@ exports.Grooming = class Grooming {
       // If this is the same vote, remove it (withdraw vote).
       // Otherwise set the new vote.
       if (pos >= 0) {
+        this._systemMessage(`${user} removed a vote from ${ticket.title}`);
         ticket.votes.splice(pos, 1);
       } else {
+        this._systemMessage(`${user} voted ${score} on ${ticket.title}`);
         ticket.votes = ticket.votes
           .filter(v => v.author != user)
           .concat({
@@ -101,18 +114,19 @@ exports.Grooming = class Grooming {
     });
   }
 
-  deleteTicket(ticketId) {
-    const pos = this.state.tickets.findIndex(t => t.id == ticketId);
-    if (pos < 0) {
-      return false;
-    }
+  deleteTicket(ticketId, user) {
     this.change(state => {
+      const pos = state.tickets.findIndex(t => t.id == ticketId);
+      if (pos < 0) {
+        return;
+      }
+      const ticket = state.tickets[pos];
       state.tickets.splice(pos, 1);
+      this._systemMessage(`${user} deleted ${ticket.title}`);
     });
-    return true;
   }
 
-  createTicket(title) {
+  createTicket(title, user) {
     this.change(state => {
       state.tickets.push({
         id: Date.now(),
@@ -121,6 +135,9 @@ exports.Grooming = class Grooming {
         votes: []
       });
     });
+    if (user) {
+      this._systemMessage(`${user} added ticket ${title}`);
+    }
   }
 
   startTyping(name) {

@@ -69,11 +69,11 @@ module.exports = function socketsInterface(wss, grooming) {
       },
       addAdvice(val) {
         const { ticketId, advice } = val;
-        grooming.addAdvice(ticketId, advice);
+        grooming.addAdvice(ticketId, advice, user);
       },
       removeAdvice(val) {
         const { ticketId, advice } = val;
-        grooming.removeAdvice(ticketId, advice);
+        grooming.removeAdvice(ticketId, advice, user);
       },
       toggleVote(val) {
         const { ticketId, score } = val;
@@ -81,11 +81,11 @@ module.exports = function socketsInterface(wss, grooming) {
       },
       deleteTicket(val) {
         const { ticketId } = val;
-        grooming.deleteTicket(ticketId);
+        grooming.deleteTicket(ticketId, user);
       },
       createTicket(val) {
         const { title } = val;
-        grooming.createTicket(title);
+        grooming.createTicket(title, user);
       },
       startTyping() {
         grooming.startTyping(user);
