@@ -52,13 +52,13 @@ exports.Grooming = class Grooming {
   }
 
   addAdvice(ticketId, advice) {
-    const pos = this.state.tickets.findIndex(t => t.id == ticketId);
-    if (pos < 0) {
-      return;
-    }
     this.change(state => {
-      state.tickets[pos].advices[advice] =
-        (state.tickets[pos].advices[advice] || 0) + 1;
+      const pos = state.tickets.findIndex(t => t.id == ticketId);
+      if (pos < 0) {
+        return;
+      }
+      const current = state.tickets[pos].advices[advice] || 0;
+      state.tickets[pos].advices[advice] = Math.min(current + 1, 6);
     });
   }
 
