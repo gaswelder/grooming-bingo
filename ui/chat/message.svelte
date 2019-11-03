@@ -24,10 +24,13 @@
     margin-right: 4px;
     font-size: 90%;
   }
+  span {
+    color: gray;
+  }
 </style>
 
 <p>
   <time>{formatTime(message.timestamp)}</time>
-  {message.author}:
+  <span>{message.author}</span>
   <Text {specials} {message} />
 </p>
