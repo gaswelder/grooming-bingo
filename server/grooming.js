@@ -164,6 +164,18 @@ exports.Grooming = class Grooming {
     }
   }
 
+  renameTicket(ticketId, newTitle, user) {
+    this.change(state => {
+      const ticket = state.tickets.find(t => t.id == ticketId);
+      if (!ticket) {
+        return;
+      }
+      const oldTitle = ticket.title;
+      ticket.title = newTitle;
+      this._systemMessage(`${user} renamed ${oldTitle} to ${newTitle}`);
+    });
+  }
+
   startTyping(name) {
     const pos = this.state.users.findIndex(u => u.name == name);
     if (pos < 0) {

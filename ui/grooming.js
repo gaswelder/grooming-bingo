@@ -83,6 +83,9 @@ export class Grooming {
   createTicket(title) {
     this.send("createTicket", { title });
   }
+  renameTicket(ticketId, newTitle) {
+    this.send("renameTicket", { ticketId, newTitle });
+  }
   deleteTicket(ticketId) {
     this.send("deleteTicket", { ticketId });
   }

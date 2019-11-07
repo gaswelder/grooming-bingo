@@ -4,6 +4,7 @@
   import TechnicalDetail from "./technical-detail.svelte";
   import Menu from "./menu.svelte";
   import Card from "./card.svelte";
+  import Editable from "./editable.svelte";
 
   export let ticket, grooming;
 
@@ -16,6 +17,10 @@
 
   function toggleVote(ticket, score) {
     grooming.toggleVote(ticket.id, score);
+  }
+
+  function onTitleChange(event) {
+    grooming.renameTicket(ticket.id, event.detail.newValue);
   }
 </script>
 
@@ -42,7 +47,7 @@
 
 <Card>
   <h3>
-    {ticket.title}
+    <Editable text={ticket.title} on:change={onTitleChange} />
     <button name="delete" on:click={() => deleteTicket(ticket)}>&times;</button>
   </h3>
 

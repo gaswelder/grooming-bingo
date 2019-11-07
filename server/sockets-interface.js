@@ -94,6 +94,10 @@ module.exports = function socketsInterface(wss, grooming) {
         const { title } = val;
         grooming.createTicket(title, user);
       },
+      renameTicket(val) {
+        const { ticketId, newTitle } = val;
+        grooming.renameTicket(ticketId, newTitle, user);
+      },
       startTyping() {
         grooming.startTyping(user);
       },
