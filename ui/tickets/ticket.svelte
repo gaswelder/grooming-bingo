@@ -3,6 +3,7 @@
   import Votes from "./votes.svelte";
   import TechnicalDetail from "./technical-detail.svelte";
   import Menu from "./menu.svelte";
+  import Card from "./card.svelte";
 
   export let ticket, grooming;
 
@@ -19,20 +20,7 @@
 </script>
 
 <style>
-  div {
-    display: inline-block;
-    background: rgba(255, 255, 255, 0.93);
-    border-radius: 3px;
-    padding: 1em;
-    margin: 0.5em;
-    box-shadow: 0 1px 0 rgba(9, 30, 66, 0.25);
-    margin-bottom: 8px;
-    min-height: 20px;
-    min-width: 170px;
-    position: relative;
-    vertical-align: top;
-  }
-  div button[name="delete"] {
+  button[name="delete"] {
     display: block;
     border: none;
     font-size: 20px;
@@ -47,12 +35,12 @@
     top: 8px;
     background: transparent;
   }
-  div button[name="delete"]:hover {
+  button[name="delete"]:hover {
     background: rgba(9, 30, 66, 0.08);
   }
 </style>
 
-<div>
+<Card>
   <h3>
     {ticket.title}
     <button name="delete" on:click={() => deleteTicket(ticket)}>&times;</button>
@@ -71,4 +59,4 @@
     selected={Object.keys(ticket.advices)} />
   <h4>Votes</h4>
   <Votes {ticket} onVote={score => toggleVote(ticket, score)} />
-</div>
+</Card>
