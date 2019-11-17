@@ -51,7 +51,6 @@
     flex-direction: column;
     border-left: dashed 1px gray;
     height: 100%;
-    width: 300px;
     padding: 0 10px;
   }
   div > div {
