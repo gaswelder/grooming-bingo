@@ -17,7 +17,7 @@
     background = state.map;
   });
 
-  let width = 400;
+  let width = Number(localStorage.getItem("chatWidth")) || 400;
   let originalWidth;
 
   const clamp = (val, min, max) => Math.min(Math.max(val, min), max);
@@ -33,6 +33,7 @@
 
   const onStop = () => {
     originalWidth = undefined;
+    localStorage.setItem("chatWidth", width);
   };
 </script>
 
