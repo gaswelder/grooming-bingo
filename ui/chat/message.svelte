@@ -55,6 +55,7 @@
   }
   p :global(img) {
     max-width: 100%;
+    vertical-align: top;
   }
   p span:first-of-type {
     color: gray;
