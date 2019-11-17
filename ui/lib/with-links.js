@@ -10,7 +10,11 @@ const unique = a => [...new Set(a)];
 export function withLinks(text) {
   let result = text;
   for (const url of unique(findLinks(text))) {
-    result = result.replace(url, `<a target="_blank" href="${url}">${url}</a>`);
+    const content = url.endsWith(".jpg") ? `<img src="${url}">` : url;
+    result = result.replace(
+      url,
+      `<a target="_blank" href="${url}">${content}</a>`
+    );
   }
   return result;
 }
@@ -22,6 +26,6 @@ export function withLinks(text) {
  * @returns {string[]}
  */
 function findLinks(text) {
-  const p = /https?:\/\/\w+\.\w+(\.\w+)*/g;
+  const p = /https?:\/\/[\w-]+\.[\w-]+(\.[\w-]+)*(\/[\w-]+)*(\.\w+)?/g;
   return [...text.matchAll(p)].map(m => m[0]);
 }

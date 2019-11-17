@@ -17,9 +17,17 @@
     ].join(":");
   }
 
+  const memeImages = {
+    "jackiechan.jpg":
+      "https://memeshappen.com/media/templates/jackie_chan_wtf.jpg",
+    "genius.jpg":
+      "https://i.kym-cdn.com/photos/images/newsfeed/000/471/542/069.jpg"
+  };
+  const memeImage = text => memeImages[text] || text;
+
   function process(text) {
     const buffer = document.createElement("div");
-    buffer.innerHTML = withLinks(withImages(text));
+    buffer.innerHTML = withLinks(withImages(memeImage(text)));
     for (const node of buffer.childNodes) {
       if (node.nodeType == node.TEXT_NODE) {
         node.textContent = node.textContent
