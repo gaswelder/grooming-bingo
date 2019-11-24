@@ -26,7 +26,7 @@
       dispatch("typingstart");
     }
     clearTimeout(interval);
-    interval = setTimeout(stop, 3000);
+    interval = setTimeout(stop, 1000);
   }
 
   function stop() {
