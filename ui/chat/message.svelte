@@ -1,5 +1,7 @@
 <script>
   import { withLinks } from "../lib/with-links";
+  import { markdown } from "../lib/markdown";
+
   export let message;
   export let specials = ["@here"];
 
@@ -27,7 +29,7 @@
 
   function process(text) {
     const buffer = document.createElement("div");
-    buffer.innerHTML = withLinks(withImages(memeImage(text)));
+    buffer.innerHTML = withLinks(withImages(memeImage(markdown(text))));
     return buffer.innerHTML;
   }
 
