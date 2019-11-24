@@ -13,7 +13,12 @@ export class Grooming {
       ? `ws://${location.host}/grooming`
       : `wss://${location.host}/grooming`;
     this.socket = new PersistentSocket(url);
-    this.socket.onConnect(() => this.send("auth", this.username));
+    this.socket.onConnect(() => {
+      this.send("auth", this.username);
+      if (this.state) {
+        this.send("state", this.state);
+      }
+    });
     this.socket.onMessage(message => {
       const { type, val } = JSON.parse(message.data);
       switch (type) {

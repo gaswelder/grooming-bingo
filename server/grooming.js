@@ -6,6 +6,7 @@ const defaultOptions = {
 
 exports.Grooming = class Grooming {
   constructor(options = {}) {
+    this.creationTime = Date.now();
     this.state = {
       tickets: [],
       chat: [],
@@ -24,6 +25,14 @@ exports.Grooming = class Grooming {
     this.state = immer.produce(this.state, changer, changes => {
       this.changeListeners.forEach(f => f(changes));
     });
+  }
+
+  restoreState(state) {
+    if (Date.now() - this.creationTime > 5000) {
+      return;
+    }
+    console.log("restoring state");
+    this.change(() => state);
   }
 
   addUser(username) {

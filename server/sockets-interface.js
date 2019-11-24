@@ -52,6 +52,9 @@ module.exports = function socketsInterface(wss, grooming) {
     });
 
     const handlers = {
+      state(val) {
+        grooming.restoreState(val);
+      },
       echo(val) {
         send("ohce", val);
       },
