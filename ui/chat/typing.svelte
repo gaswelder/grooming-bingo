@@ -8,17 +8,18 @@
 </script>
 
 <style>
-  div {
-    display: block;
+  p {
     font-style: italic;
-    height: auto;
-    max-height: 100px;
-    background-color: "red";
   }
 </style>
 
-<div>
-  {#each typingUsers as user}
-    <p>@{user.name} is typing...</p>
-  {/each}
-</div>
+<p>
+  {#if typingUsers.length > 2}
+    @{typingUsers[0].name}, @{typingUsers[1].name} and {typingUsers.length - 2}
+    more are typing...
+  {:else if typingUsers.length > 1}
+    @{typingUsers[0].name} and @{typingUsers[1].name} are typing...
+  {:else if typingUsers.length == 1}
+    @{typingUsers[0].name} is typing...
+  {:else}&nbsp;{/if}
+</p>
