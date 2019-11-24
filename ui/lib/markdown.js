@@ -17,10 +17,7 @@ class wrap extends token {
 
 class text extends token {
   toString() {
-    return this.s
-      .split(/\n\n+/)
-      .map(p => `<p>${p}</p>`)
-      .join("");
+    return this.s;
   }
 }
 

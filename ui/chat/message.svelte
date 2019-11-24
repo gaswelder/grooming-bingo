@@ -48,32 +48,41 @@
     margin-right: 4px;
     font-size: 90%;
   }
-  p :global(img) {
+  div :global(img) {
     max-width: 100%;
     vertical-align: top;
   }
-  p span:first-of-type {
+  div :global(code) {
+    background: white;
+  }
+  div span:first-of-type {
     color: gray;
   }
-  p.special span:last-of-type {
+  div.special span:last-of-type {
     font-weight: bold;
     color: chartreuse;
     background: crimson;
   }
-  p.system {
+  div.system {
     color: gray;
   }
-  p.system span:first-of-type {
+  div.system span:first-of-type {
     display: none;
+  }
+  div > div {
+    float: left;
+    margin-right: 0.5em;
   }
 </style>
 
-<p
+<div
   class:special={specials.includes(message.text)}
   class:system={message.author == null}>
-  <time>{formatTime(message.timestamp)}</time>
-  <span>{message.author}</span>
-  <span>
+  <div>
+    <time>{formatTime(message.timestamp)}</time>
+    <span>{message.author}</span>
+  </div>
+  <p>
     {@html process(message.text)}
-  </span>
-</p>
+  </p>
+</div>
