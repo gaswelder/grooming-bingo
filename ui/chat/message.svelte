@@ -28,13 +28,6 @@
   function process(text) {
     const buffer = document.createElement("div");
     buffer.innerHTML = withLinks(withImages(memeImage(text)));
-    for (const node of buffer.childNodes) {
-      if (node.nodeType == node.TEXT_NODE) {
-        node.textContent = node.textContent
-          .replace(/please/g, "bitch")
-          .replace(/PLEASE/g, "BITCH");
-      }
-    }
     return buffer.innerHTML;
   }
 
