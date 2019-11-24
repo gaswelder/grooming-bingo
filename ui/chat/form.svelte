@@ -38,12 +38,13 @@
 
   function onKeyPress(event) {
     // Send when Enter is pressed.
-    if (event.key == "Enter" && !event.ctrlKey) {
+    // But on Shift-Enter just insert a line break.
+    if (event.key == "Enter" && !event.shiftKey) {
       event.preventDefault();
       send();
       stop();
+      return;
     }
-
     start();
   }
 
