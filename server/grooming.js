@@ -14,7 +14,6 @@ exports.Grooming = class Grooming {
     };
     this.options = Object.assign({}, defaultOptions, options);
     this.changeListeners = [];
-    this.createTicket("Пропозаль");
   }
 
   onChange(f) {
