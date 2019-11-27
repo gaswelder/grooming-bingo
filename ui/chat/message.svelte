@@ -1,6 +1,5 @@
 <script>
-  import { withLinks } from "../lib/with-links";
-  import { markdown } from "../lib/markdown";
+  import marked from "marked";
 
   export let message;
   export let specials = ["@here"];
@@ -29,7 +28,7 @@
 
   function process(text) {
     const buffer = document.createElement("div");
-    buffer.innerHTML = withLinks(withImages(memeImage(markdown(text))));
+    buffer.innerHTML = withImages(memeImage(marked(text)));
     return buffer.innerHTML;
   }
 
