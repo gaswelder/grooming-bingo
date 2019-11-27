@@ -32,7 +32,7 @@ export class Grooming {
         case "changes":
           this.state = applyPatches(this.state, val);
           this.changeListeners.forEach(listener => {
-            listener.f(this.state, val);
+            listener(this.state, val);
           });
           break;
         case "ohce":
@@ -48,8 +48,8 @@ export class Grooming {
     }, 10000);
   }
 
-  onChange(f, filter) {
-    this.changeListeners.push({ f, filter });
+  onChange(f) {
+    this.changeListeners.push(f);
   }
   onConnectionChange(f) {
     this.socket.onConnectionChange(f);
@@ -58,15 +58,12 @@ export class Grooming {
     this.loadListeners.push(func);
   }
   onChatMessage(func) {
-    this.onChange(
-      function(state, val) {
-        const messages = val
-          .filter(change => change.op == "add" && change.path[0] == "chat")
-          .map(change => change.value);
-        messages.forEach(m => func(m));
-      },
-      [["chat"]]
-    );
+    this.onChange(function(state, val) {
+      const messages = val
+        .filter(change => change.op == "add" && change.path[0] == "chat")
+        .map(change => change.value);
+      messages.forEach(m => func(m));
+    });
   }
 
   send(type, val) {

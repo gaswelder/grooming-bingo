@@ -11,19 +11,10 @@
   let messages = [];
   let messagesContainer;
 
-  grooming.onChange(
-    state => {
-      messages = state.chat;
-    },
-    [["chat"]]
-  );
-
-  grooming.onChange(
-    state => {
-      users = state.users;
-    },
-    [["users"]]
-  );
+  grooming.onChange(state => {
+    messages = state.chat;
+    users = state.users;
+  });
 
   grooming.onLoad(state => {
     users = state.users;
