@@ -1,11 +1,15 @@
 <script>
   import { onMount, createEventDispatcher } from "svelte";
 
+  export let lastMessage;
+
   const dispatch = createEventDispatcher();
 
-  let textarea;
   let interval;
   let typing = false;
+
+  let draft = "";
+  let editing = false;
 
   onMount(() => {
     return stop;
@@ -40,12 +44,18 @@
   }
 
   function send() {
-    const s = textarea.value.trim();
-    textarea.value = "";
+    const s = draft.trim();
+    const e = editing;
+    draft = "";
+    editing = false;
     if (s == "") {
       return;
     }
-    dispatch("submit", s);
+    if (e) {
+      dispatch("edit", s);
+    } else {
+      dispatch("submit", s);
+    }
   }
 
   function toDataURL(file) {
@@ -99,8 +109,21 @@
 </style>
 
 <form on:submit|preventDefault={send}>
+  {#if editing}
+    <small>editing (esc to cancel)</small>
+  {/if}
   <textarea
-    bind:this={textarea}
+    bind:value={draft}
+    on:keyup={e => {
+      if (!editing && e.key == 'ArrowUp' && draft == '' && lastMessage) {
+        editing = true;
+        draft = lastMessage.text;
+      }
+      if (editing && e.key == 'Escape') {
+        editing = false;
+        draft = '';
+      }
+    }}
     on:paste={onPaste}
     on:keypress={onKeyPress}
     on:blur={() => {

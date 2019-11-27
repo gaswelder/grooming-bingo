@@ -66,6 +66,20 @@ export class Grooming {
     });
   }
 
+  lastChatMessage() {
+    if (!this.state) {
+      return null;
+    }
+    return this.state.chat
+      .slice()
+      .reverse()
+      .find(m => m.author == this.username);
+  }
+
+  editChatMessage(newText) {
+    this.send("editChatMessage", { newText });
+  }
+
   send(type, val) {
     const message = JSON.stringify({ type, val });
     this.socket.send(message);

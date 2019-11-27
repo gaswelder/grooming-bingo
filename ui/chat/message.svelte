@@ -84,5 +84,8 @@
   </div>
   <p>
     {@html process(message.text)}
+    {#if message.edited}
+      <small>(edited)</small>
+    {/if}
   </p>
 </div>

@@ -77,6 +77,9 @@ module.exports = function socketsInterface(wss, grooming) {
         }
         grooming.chat(user, val);
       },
+      editChatMessage({ newText }) {
+        grooming.editChatMessage(user, newText);
+      },
       addAdvice(val) {
         const { ticketId, advice } = val;
         grooming.addAdvice(ticketId, advice, user);

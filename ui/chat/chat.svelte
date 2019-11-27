@@ -10,10 +10,12 @@
   let users = [];
   let messages = [];
   let messagesContainer;
+  let lastMessage;
 
   grooming.onChange(state => {
     messages = state.chat;
     users = state.users;
+    lastMessage = grooming.lastChatMessage();
   });
 
   grooming.onLoad(state => {
@@ -54,8 +56,12 @@
   </div>
   <Typing {users} currentUser={grooming.username} />
   <Form
+    {lastMessage}
     on:submit={e => {
       grooming.sendChatMessage(e.detail);
+    }}
+    on:edit={e => {
+      grooming.editChatMessage(e.detail);
     }}
     on:typingstart={() => {
       grooming.startTyping();

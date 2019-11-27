@@ -57,8 +57,23 @@ exports.Grooming = class Grooming {
       state.chat.push({
         author,
         text,
-        timestamp: Date.now()
+        timestamp: Date.now(),
+        edited: false
       });
+    });
+  }
+
+  editChatMessage(author, newText) {
+    this.change(state => {
+      let pos = state.chat.length - 1;
+      while (pos >= 0 && state.chat[pos].author != author) {
+        pos--;
+      }
+      if (pos < 0) {
+        return;
+      }
+      state.chat[pos].text = newText;
+      state.chat[pos].edited = true;
     });
   }
 
