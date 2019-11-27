@@ -11,15 +11,6 @@
     return stop;
   });
 
-  function submit(event) {
-    event.preventDefault();
-    send();
-  }
-
-  function onBlur() {
-    dispatch("typingstop");
-  }
-
   function start() {
     if (!typing) {
       typing = true;
@@ -107,11 +98,13 @@
   }
 </style>
 
-<form on:submit={submit}>
+<form on:submit|preventDefault={send}>
   <textarea
     bind:this={textarea}
     on:paste={onPaste}
     on:keypress={onKeyPress}
-    on:blur={onBlur} />
+    on:blur={() => {
+      dispatch('typingstop');
+    }} />
   <button type="submit">Send (enter)</button>
 </form>
