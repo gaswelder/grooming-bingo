@@ -1,9 +1,6 @@
 import { Grooming } from "./grooming";
 import UI from "./ui.svelte";
-
-const ding = new Audio(
-  "https://codeskulptor-demos.commondatastorage.googleapis.com/pang/pop.mp3"
-);
+import { play } from "./lib/sound";
 
 window.initGrooming = function(root) {
   let username = localStorage.getItem("username");
@@ -19,7 +16,7 @@ window.initGrooming = function(root) {
   Notification.requestPermission();
   grooming.onChatMessage(message => {
     if (message.author && message.author != grooming.username) {
-      ding.play();
+      play("pop");
     }
     if (
       message.author &&
@@ -27,6 +24,13 @@ window.initGrooming = function(root) {
       Notification.permission == "granted"
     ) {
       new Notification(`${message.author}: ${message.text}`);
+    }
+  });
+
+  grooming.onChange((state, diffs) => {
+    const re = /tickets\.\d+\.advices/;
+    if (diffs.some(diff => diff.op == "add" && re.test(diff.path.join(".")))) {
+      play("ding");
     }
   });
 
