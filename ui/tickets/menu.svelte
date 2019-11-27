@@ -1,5 +1,5 @@
 <script>
-  import Popover from "./popover.svelte";
+  import Popover from "../lib/popover.svelte";
   export let onSelect, selected;
 
   let open = false;

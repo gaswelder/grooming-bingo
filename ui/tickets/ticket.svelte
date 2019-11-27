@@ -3,8 +3,8 @@
   import Votes from "./votes.svelte";
   import TechnicalDetail from "./technical-detail.svelte";
   import Menu from "./menu.svelte";
-  import Card from "./card.svelte";
-  import Editable from "./editable.svelte";
+  import Card from "../lib/card.svelte";
+  import Editable from "../lib/editable.svelte";
 
   export let ticket, grooming;
 

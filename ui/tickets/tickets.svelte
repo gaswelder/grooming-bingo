@@ -1,7 +1,7 @@
 <script>
   import { onMount } from "svelte";
   import Ticket from "./ticket.svelte";
-  import Card from "./card.svelte";
+  import Card from "../lib/card.svelte";
 
   export let grooming;
 
