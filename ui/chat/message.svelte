@@ -1,22 +1,9 @@
 <script>
   import marked from "marked";
+  import Time from "./time.svelte";
 
   export let message;
   export let specials = ["@here"];
-
-  function formatTime(timestamp) {
-    const d = new Date(timestamp);
-    return [
-      d
-        .getHours()
-        .toString()
-        .padStart(2, "0"),
-      d
-        .getMinutes()
-        .toString()
-        .padStart(2, "0")
-    ].join(":");
-  }
 
   const memeImages = {
     "jackiechan.jpg":
@@ -42,49 +29,47 @@
 </script>
 
 <style>
-  time {
-    color: gray;
-    margin-right: 4px;
-    font-size: 90%;
+  article {
+    margin: 1em 0;
   }
-  div :global(img) {
+  article .header {
+    margin-bottom: 0.2em;
+  }
+  article .header > span {
+    font-weight: bold;
+    margin-right: 0.3em;
+  }
+  article .content :global(img) {
     max-width: 100%;
     vertical-align: top;
   }
-  div :global(code) {
+  article .content :global(code) {
     background: white;
   }
-  div span:first-of-type {
-    color: gray;
+  article .content :global(pre) {
+    background: white;
+    padding: 0.5em;
+    border-radius: 2px;
   }
-  div.special span:last-of-type {
+  article .content > :global(:first-child) {
+    margin-top: 0;
+  }
+  article.special .content {
     font-weight: bold;
     color: chartreuse;
     background: crimson;
   }
-  div.system {
-    color: gray;
-  }
-  div.system span:first-of-type {
-    display: none;
-  }
-  div > div {
-    float: left;
-    margin-right: 0.5em;
-  }
 </style>
 
-<div
-  class:special={specials.includes(message.text)}
-  class:system={message.author == null}>
-  <div>
-    <time>{formatTime(message.timestamp)}</time>
+<article class:special={specials.includes(message.text)}>
+  <div class="header">
     <span>{message.author}</span>
-  </div>
-  <p>
-    {@html process(message.text)}
+    <Time value={message.timestamp} />
     {#if message.edited}
       <small>(edited)</small>
     {/if}
-  </p>
-</div>
+  </div>
+  <div class="content">
+    {@html process(message.text)}
+  </div>
+</article>

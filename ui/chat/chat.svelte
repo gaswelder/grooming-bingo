@@ -1,6 +1,7 @@
 <script>
   import Form from "./form.svelte";
   import Message from "./message.svelte";
+  import Log from "./log.svelte";
   import Typing from "./typing.svelte";
   import Users from "../users.svelte";
   import { afterUpdate, onMount } from "svelte";
@@ -51,7 +52,11 @@
   <Users {users} />
   <div bind:this={messagesContainer}>
     {#each messages as message}
-      <Message specials={grooming.specialMessages} {message} />
+      {#if message.author == null}
+        <Log timestamp={message.timestamp} text={message.text} />
+      {:else}
+        <Message specials={grooming.specialMessages} {message} />
+      {/if}
     {/each}
   </div>
   <Typing {users} currentUser={grooming.username} />
