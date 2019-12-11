@@ -10,27 +10,7 @@
   renderer.link = (href, title, text) =>
     `<a target="_blank" href="${href}">${title || text}</a>`;
 
-  const memeImages = {
-    "jackiechan.jpg":
-      "https://memeshappen.com/media/templates/jackie_chan_wtf.jpg",
-    "genius.jpg":
-      "https://i.kym-cdn.com/photos/images/newsfeed/000/471/542/069.jpg"
-  };
-  const memeImage = text => memeImages[text] || text;
-
-  function process(text) {
-    const buffer = document.createElement("div");
-    buffer.innerHTML = withImages(memeImage(marked(text, { renderer })));
-    return buffer.innerHTML;
-  }
-
-  function withImages(text) {
-    for (const m of text.matchAll(/\{(data:image\/\w+;base64,.+)\}/)) {
-      const url = m[1];
-      text = text.replace(m[0], `<img src="${url}">`);
-    }
-    return text;
-  }
+  const process = text => marked(text, { renderer });
 </script>
 
 <style>
