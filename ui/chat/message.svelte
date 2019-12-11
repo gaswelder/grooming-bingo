@@ -1,6 +1,7 @@
 <script>
   import marked from "marked";
   import Time from "./time.svelte";
+  import Avatar from "./avatar.svelte";
 
   export let message;
   export let specials = ["@here"];
@@ -31,9 +32,13 @@
 <style>
   article {
     margin: 1em 0;
+    position: relative;
   }
-  article .header {
-    margin-bottom: 0.2em;
+  article > :global(:first-child) {
+    position: absolute;
+  }
+  article > :not(:first-child) {
+    margin-left: 40px;
   }
   article .header > span {
     font-weight: bold;
@@ -62,6 +67,7 @@
 </style>
 
 <article class:special={specials.includes(message.text)}>
+  <Avatar user={message.author} />
   <div class="header">
     <span>{message.author}</span>
     <Time value={message.timestamp} />
