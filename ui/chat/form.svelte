@@ -85,16 +85,14 @@
     event.preventDefault();
     const t = event.target;
 
-    console.log(event.target.selectionStart, event);
     toDataURL(file).then(url => {
       const a = t.selectionStart;
       const b = t.selectionEnd;
       t.value =
         t.value.substring(0, a) +
-        "{" +
-        url +
-        "}" +
+        `<img src="${url}">` +
         t.value.substring(b, t.value.length);
+      draft = t.value;
     });
   }
 </script>
