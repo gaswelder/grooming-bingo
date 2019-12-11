@@ -6,6 +6,10 @@
   export let message;
   export let specials = ["@here"];
 
+  const renderer = new marked.Renderer();
+  renderer.link = (href, title, text) =>
+    `<a target="_blank" href="${href}">${title || text}</a>`;
+
   const memeImages = {
     "jackiechan.jpg":
       "https://memeshappen.com/media/templates/jackie_chan_wtf.jpg",
@@ -16,7 +20,7 @@
 
   function process(text) {
     const buffer = document.createElement("div");
-    buffer.innerHTML = withImages(memeImage(marked(text)));
+    buffer.innerHTML = withImages(memeImage(marked(text, { renderer })));
     return buffer.innerHTML;
   }
 
