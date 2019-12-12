@@ -1,14 +1,11 @@
 <script>
   export let onVote;
   export let ticket;
+  import User from "../user.svelte";
 
   const scores = [1, 2, 3, 5, 8, 13].reverse();
-
-  $: votes = score =>
-    ticket.votes
-      .filter(vote => vote.score == score)
-      .map(vote => vote.author)
-      .join(", ");
+  const voters = (ticket, score) =>
+    ticket.votes.filter(vote => vote.score == score);
 </script>
 
 <style>
@@ -49,6 +46,8 @@
       type="button">
       {score}
     </button>
-    {votes(score)}
+    {#each voters(ticket, score) as voter, i}
+      <User user={{ name: voter.author }} />
+    {/each}
   </div>
 {/each}
