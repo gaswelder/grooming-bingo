@@ -2,15 +2,40 @@
   import marked from "marked";
   import Time from "./time.svelte";
   import Avatar from "./avatar.svelte";
+  import { onMount } from "svelte";
 
   export let message;
   export let specials = ["@here"];
 
-  const renderer = new marked.Renderer();
-  renderer.link = (href, title, text) =>
-    `<a target="_blank" href="${href}">${title || text}</a>`;
+  let images = [];
 
-  const process = text => marked(text, { renderer });
+  const hrefIsImage = href =>
+    new Promise(ok => {
+      const img = document.createElement("img");
+      img.onload = () => ok(true);
+      img.onerror = () => ok(false);
+      img.src = href;
+    });
+
+  $: renderer = new marked.Renderer();
+  $: renderer.link = (href, title, text) => {
+    if (images.includes(href)) {
+      return `<a target="_blank" href="${href}"><img src="${href}"></a>`;
+    }
+    return `<a target="_blank" href="${href}">${title || text}</a>`;
+  };
+
+  $: content = marked(message.text, { renderer });
+
+  let container;
+  onMount(async () => {
+    const links = container.querySelectorAll("a[href]");
+    links.forEach(async a => {
+      if (await hrefIsImage(a.href)) {
+        images = [...images, a.href];
+      }
+    });
+  });
 </script>
 
 <style>
@@ -59,7 +84,7 @@
       <small>(edited)</small>
     {/if}
   </div>
-  <div class="content">
-    {@html process(message.text)}
+  <div class="content" bind:this={container}>
+    {@html content}
   </div>
 </article>
