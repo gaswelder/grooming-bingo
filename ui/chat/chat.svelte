@@ -3,7 +3,7 @@
   import Message from "./message.svelte";
   import Log from "./log.svelte";
   import Typing from "./typing.svelte";
-  import Users from "../users.svelte";
+  import User from "../user.svelte";
   import { afterUpdate, onMount } from "svelte";
 
   export let grooming;
@@ -30,14 +30,14 @@
 </script>
 
 <style>
-  div {
+  div.root {
     display: flex;
     flex-direction: column;
     border-left: dashed 1px gray;
     height: 100%;
     padding: 0 10px;
   }
-  div > div {
+  div.messages {
     display: block;
     border: none;
     width: auto;
@@ -48,9 +48,13 @@
   }
 </style>
 
-<div>
-  <Users {users} />
-  <div bind:this={messagesContainer}>
+<div class="root">
+  <div>
+    {#each users as user}
+      <User {user} />
+    {/each}
+  </div>
+  <div class="messages" bind:this={messagesContainer}>
     {#each messages as message}
       {#if message.author == null}
         <Log timestamp={message.timestamp} text={message.text} />

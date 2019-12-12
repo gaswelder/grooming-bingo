@@ -1,5 +1,5 @@
 <script>
-  export let users;
+  export let user;
 </script>
 
 <style>
@@ -15,8 +15,4 @@
   }
 </style>
 
-<div>
-  {#each users as user}
-    <span>{user.name}</span>
-  {/each}
-</div>
+<span>{user.name}</span>
