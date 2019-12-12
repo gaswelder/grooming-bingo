@@ -5,24 +5,23 @@
   let open = false;
 
   const specifications = [
-    "it's very easy",
+    "calculation",
+    "change that behavior",
+    "copypest",
+    "does not make sense",
+    "exactly",
+    "functionality",
+    "I have to look at the code",
+    "I'm not sure",
+    "it's very easy (simple)",
     "it's not that hard",
+    "it's a different card / there's a card for that",
+    "makes sense",
+    "генерак",
+    "гугел",
     "пропозаль",
     "папап",
-    "тогль",
-    "I'm not sure",
-    "it's a different card",
-    "there's a card for that",
-    "copypest",
-    "exactly",
-    "I have to look at the code",
-    "makes sense",
-    "does not make sense",
-    "calculate",
-    "we don't care",
-    "it's very simple",
-    "I don't know",
-    "change that behavior"
+    "тогль"
   ];
 
   function customInputKeypress(event) {
@@ -41,10 +40,14 @@
   button {
     margin-top: 8px;
   }
+  input {
+    margin: 10px 12px 8px;
+  }
   ul {
     list-style-type: none;
     padding: 0;
     margin-bottom: 8px;
+    margin-top: 0;
   }
   li {
     color: #172b4d;
@@ -55,9 +58,6 @@
   }
   li:hover {
     background-color: rgba(9, 30, 66, 0.04);
-  }
-  input {
-    margin: 8px 12px;
   }
 </style>
 
@@ -77,6 +77,7 @@
 <div id="menu-wrapper">
   {#if open}
     <Popover>
+      <input on:keypress={customInputKeypress} />
       <ul>
         {#each specifications.filter(s => !selected.includes(s)) as spec}
           <li
@@ -88,7 +89,6 @@
           </li>
         {/each}
       </ul>
-      <input on:keypress={customInputKeypress} />
     </Popover>
   {/if}
 </div>
