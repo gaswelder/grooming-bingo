@@ -51,7 +51,7 @@
 </style>
 
 <div>
-  {text} {renderChecks(count)}
+  {text} {renderChecks(count - 1)}
   <button on:click={() => dispatch('minus')} name="remove-advice">
     &minus;
   </button>
