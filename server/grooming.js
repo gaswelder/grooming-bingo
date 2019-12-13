@@ -35,6 +35,7 @@ exports.Grooming = class Grooming {
     };
     this.options = Object.assign({}, defaultOptions, options);
     this.changeListeners = [];
+    this.userGC = {};
   }
 
   onChange(f) {
@@ -51,11 +52,23 @@ exports.Grooming = class Grooming {
     if (Date.now() - this.creationTime > 5000) {
       return;
     }
-    console.log("restoring state");
     this.change(() => state);
   }
 
+  clearUserVotes(username) {
+    this.change(state => {
+      for (const ticket of state.tickets) {
+        ticket.votes = ticket.votes.filter(vote => vote.author != username);
+      }
+    });
+  }
+
   addUser(username) {
+    if (this.userGC[username]) {
+      clearTimeout(this.userGC[username]);
+      delete this.userGC[username];
+    }
+
     this.change(state => {
       state.users.push({
         name: username,
@@ -70,6 +83,12 @@ exports.Grooming = class Grooming {
       state.users = state.users.filter(u => u.name != username);
       this._systemMessage(`${username} disconnected`);
     });
+    if (this.userGC[username]) {
+      clearTimeout(this.userGC[username]);
+    }
+    this.userGC[username] = setTimeout(() => {
+      this.clearUserVotes(username);
+    }, 2 * 60 * 1000);
   }
 
   chat(author, text) {
