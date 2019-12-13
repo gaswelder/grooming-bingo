@@ -7,15 +7,27 @@
   </head>
   <body>
     <script src="grooming.js"></script>
+    <style>
+      #github {
+        background-color: #002;
+        color: white;
+        font-weight: bold;
+        font-size: 10pt;
+        line-height: 22pt;
+        text-decoration: none;
+        display: inline-block;
+        padding: 0 30pt;
+        transform: rotate(45deg) translateX(-30%);
+        box-shadow: 1px 0px 11px #446;
+        position: fixed;
+        left: 0;
+        bottom: 0;
+      }
+    </style>
     <div id="root"></div>
-    <a
-      style="position: fixed; top: 0; right: 0;"
-      href="https://github.com/gaswelder/grooming-bingo/"
-      ><img
-        width="149"
-        height="149"
-        src="https://github.blog/wp-content/uploads/2008/12/forkme_right_green_007200.png?resize=149%2C149"
-    /></a>
+    <a id="github" href="https://github.com/gaswelder/grooming-bingo/">
+      Fork me on Github
+    </a>
     <script>
       window.initGrooming(document.getElementById("root"));
     </script>
