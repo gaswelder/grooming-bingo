@@ -5,12 +5,8 @@
   const dispatch = createEventDispatcher();
 
   function renderChecks(count) {
-    if (!count) {
-      return "";
-    }
     let s = "";
-    const n = Math.ceil((count - 1) / 2);
-    for (let i = 0; i < n; i++) {
+    for (let i = 0; i < count; i++) {
       s += "+";
     }
     return s;
