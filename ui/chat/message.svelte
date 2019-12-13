@@ -3,6 +3,7 @@
   import Time from "./time.svelte";
   import Avatar from "./avatar.svelte";
   import { onMount } from "svelte";
+  import { replaceSmileys } from "./smileys";
 
   export let message;
   export let specials = ["@here"];
@@ -25,7 +26,7 @@
     return `<a target="_blank" href="${href}">${title || text}</a>`;
   };
 
-  $: content = marked(message.text, { renderer });
+  $: content = replaceSmileys(marked(message.text, { renderer }));
 
   let container;
   onMount(async () => {
@@ -45,6 +46,10 @@
   }
   article > :global(:first-child) {
     position: absolute;
+  }
+  article :global(.skype-smiley) {
+    width: 24px;
+    height: 24px;
   }
   article > :not(:first-child) {
     margin-left: 40px;
