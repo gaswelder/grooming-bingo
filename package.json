@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
-    "immer": "^4.0.1",
+    "immer": "^8.0.1",
     "marked": "^0.7.0",
     "ws": "^7.1.2"
   },
